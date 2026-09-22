@@ -17,4 +17,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://kubermeister.com/sitemap-index.xml
+Sitemap: https://kubermeister.dev/sitemap-index.xml

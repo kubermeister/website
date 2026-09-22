@@ -111,7 +111,7 @@ const tree = (card: Card): El =>
                     color: MUTED,
                 },
                 children: [
-                    el('div', { style: { display: 'flex', color: ACCENT }, children: 'kubermeister.com' }),
+                    el('div', { style: { display: 'flex', color: ACCENT }, children: 'kubermeister.dev' }),
                     el('div', {
                         style: { display: 'flex', marginLeft: 'auto' },
                         children: 'macOS · Windows · Linux',

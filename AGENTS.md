@@ -1,4 +1,4 @@
-# kubermeister.com
+# kubermeister.dev
 
 The marketing site and documentation for Kubermeister. The application itself lives in
 [`kubermeister/kubermeister`](https://github.com/kubermeister/kubermeister); this repository
