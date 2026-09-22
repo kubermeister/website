@@ -1,7 +1,7 @@
-# kubermeister.com
+# kubermeister.dev
 
 The Kubermeister website and documentation. Astro with Starlight for the docs, Tailwind 4 for the
-marketing pages, deployed to GitHub Pages at [kubermeister.com](https://kubermeister.com).
+marketing pages, deployed to GitHub Pages at [kubermeister.dev](https://kubermeister.dev).
 
 ```sh
 npm install
