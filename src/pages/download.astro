@@ -14,12 +14,16 @@ const release = await latestRelease();
 const published = (asset: string) => release.assets.length === 0 || release.assets.includes(asset);
 
 const groups = [
-    { os: 'macos' as const, label: 'macOS', hint: 'Developer ID signed and notarized. macOS 11 or newer.' },
-    { os: 'windows' as const, label: 'Windows', hint: 'Windows 10 or newer, x86-64.' },
+    { os: 'macos' as const, label: 'macOS', hint: 'Developer ID signed and notarised. macOS 13 or newer.' },
+    {
+        os: 'windows' as const,
+        label: 'Windows',
+        hint: 'Windows 10 or newer, x86-64. The installer is unsigned, so SmartScreen may warn; check it against SHA256SUMS.',
+    },
     {
         os: 'linux' as const,
         label: 'Linux',
-        hint: 'x86-64. The AppImage installs nothing; the .deb is for Debian and Ubuntu.',
+        hint: 'x86-64, unsigned. The AppImage installs nothing; the .deb is for Debian and Ubuntu.',
     },
 ];
 
@@ -49,7 +53,7 @@ const published_at = new Date(release.publishedAt).toLocaleDateString('en-GB', {
                 },
                 {
                     name: 'Run the installer',
-                    text: 'Open the .dmg and drag the app to Applications on macOS, run the .exe on Windows, or make the AppImage executable on Linux.',
+                    text: 'Open the .dmg and drag the app to Applications on macOS, run the .exe on Windows, or make the AppImage executable or install the .deb on Linux.',
                 },
                 {
                     name: 'Open the app',
@@ -81,7 +85,8 @@ const published_at = new Date(release.publishedAt).toLocaleDateString('en-GB', {
     <section class="container-page py-14">
         <h2 class="text-h2 font-semibold">Homebrew</h2>
         <p class="mt-3 max-w-2xl text-muted">
-            The least friction on macOS, and it keeps the app updated with everything else you install that way.
+            The least friction on macOS. The app updates itself, so a plain brew upgrade leaves it alone; name the cask
+            to upgrade it through Homebrew.
         </p>
         <div class="mt-5 max-w-2xl space-y-3">
             <CopyLine command="brew install --cask kubermeister/tap/kubermeister" />
@@ -127,7 +132,7 @@ const published_at = new Date(release.publishedAt).toLocaleDateString('en-GB', {
         </div>
 
         <p class="mt-8 text-sm text-muted">
-            Looking for an older version, a checksum or the update feed? Everything is on the
+            Looking for an older version, the SHA256SUMS checksums or the update feed? Everything is on the
             <a href={`${SITE.repo}/releases`} rel="noopener" class="text-accent hover:underline">
                 releases page
             </a>
@@ -151,7 +156,8 @@ const published_at = new Date(release.publishedAt).toLocaleDateString('en-GB', {
                 <h2 class="text-h3 font-semibold">It updates itself</h2>
                 <p class="mt-2 text-sm leading-relaxed text-muted">
                     By default a new version downloads in the background and installs when you quit. You can set it to
-                    check only, or turn it off.
+                    check only, or turn it off. A .deb install tells you a version is out and leaves installing it to
+                    you.
                 </p>
                 <a href="/docs/reference/updates/" class="mt-3 inline-block text-sm text-accent hover:underline">
                     How updates work →
@@ -160,8 +166,8 @@ const published_at = new Date(release.publishedAt).toLocaleDateString('en-GB', {
             <div>
                 <h2 class="text-h3 font-semibold">Nothing leaves your machine</h2>
                 <p class="mt-2 text-sm leading-relaxed text-muted">
-                    No backend, no account, no telemetry. The app talks to your API server and to GitHub for update
-                    checks, and that is the whole list.
+                    No backend, no account, no telemetry. The app talks to your API server, to GitHub for updates and to
+                    any chart repository you add, and that is the whole list.
                 </p>
                 <a href="/docs/reference/security/" class="mt-3 inline-block text-sm text-accent hover:underline">
                     Security →

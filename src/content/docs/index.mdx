@@ -3,7 +3,7 @@ title: Kubermeister documentation
 description: How to install and use Kubermeister, the desktop Kubernetes client for macOS, Windows and Linux — connecting clusters, reading logs, shells, port forwards, Helm and node operations.
 template: splash
 hero:
-  tagline: A fast, native desktop client for Kubernetes. Here is how to use it.
+  tagline: A desktop client for Kubernetes. Here is how to use it.
   actions:
     - text: Install Kubermeister
       link: /docs/start/install/
@@ -14,7 +14,7 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 ## Start here
 
@@ -32,12 +32,42 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
   <LinkCard
     title="Find your way around"
     href="/docs/start/interface/"
-    description="The sidebar, the scope bar, the command palette and the detail layout."
+    description="The sidebar, the top bar, the command palette and the detail layout."
+  />
+  <LinkCard
+    title="Your first five minutes"
+    href="/docs/start/first-cluster/"
+    description="Find a workload, follow its logs, open a shell and forward a port."
   />
   <LinkCard
     title="Settings"
     href="/docs/reference/settings/"
     description="Timeouts, refresh cadence, log buffer, proxies, certificates and updates."
+  />
+</CardGrid>
+
+## Browsing the cluster
+
+<CardGrid>
+  <LinkCard
+    title="Resource lists"
+    href="/docs/browse/lists/"
+    description="Search, sort, choose columns, and select rows to export or delete."
+  />
+  <LinkCard
+    title="Manifests and YAML"
+    href="/docs/browse/manifests/"
+    description="Edit with a dry run and a review of the changes, or create from a template or a file."
+  />
+  <LinkCard
+    title="Supported resource kinds"
+    href="/docs/reference/kinds/"
+    description="Every kind the app shows, and where it sits in the sidebar."
+  />
+  <LinkCard
+    title="Keyboard shortcuts"
+    href="/docs/reference/shortcuts/"
+    description="The keys the app responds to, from the command palette to the editors."
   />
 </CardGrid>
 
@@ -47,7 +77,7 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
   <LinkCard
     title="Logs"
     href="/docs/sessions/logs/"
-    description="Following a pod or every pod of a workload, filtering, and downloading the whole log."
+    description="Following a pod or every pod of a workload, searching and highlighting."
   />
   <LinkCard
     title="Shell into a pod"
@@ -57,7 +87,7 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
   <LinkCard
     title="Port forwarding"
     href="/docs/sessions/port-forwarding/"
-    description="Forwards to a pod or a Service that survive a rollout."
+    description="Forwards to a pod or a Service, listed and stopped from the top bar."
   />
   <LinkCard
     title="Helm releases"

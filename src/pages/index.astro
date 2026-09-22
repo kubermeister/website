@@ -33,7 +33,7 @@ const faqs: readonly Faq[] = [
     },
     {
         question: 'Where does my cluster data go?',
-        answer: 'Nowhere. Kubermeister talks to your API server and to GitHub for update checks. There is no backend, no account and no telemetry service collecting what your clusters contain.',
+        answer: 'Nowhere. Kubermeister talks to your API server, to GitHub for update checks and to any chart repository you add yourself. There is no backend, no account and no telemetry service collecting what your clusters contain.',
     },
     {
         question: 'Does it work behind a corporate proxy or with a private certificate authority?',
@@ -65,8 +65,9 @@ const faqs: readonly Faq[] = [
             </h1>
 
             <p class="mx-auto mt-6 max-w-2xl text-lead text-pretty text-muted">
-                Browse live clusters, follow logs, exec into pods, forward ports, manage Helm releases and drain nodes —
-                from one window on macOS, Windows and Linux. No account, no agent in your cluster, no kubectl required.
+                Browse live clusters, follow logs, exec into pods, forward ports, roll back Helm releases and drain
+                nodes — from one window on macOS, Windows and Linux. No account, no agent in your cluster, no kubectl
+                required.
             </p>
 
             <div class="mt-9 flex flex-col items-center">
@@ -137,7 +138,7 @@ const faqs: readonly Faq[] = [
                     points: [
                         'A rollback restores the template with a JSON patch, not a strategic merge, so a container added since the target revision does not survive the undo.',
                         'A revision whose template already matches the live one is reported as skipped rather than written.',
-                        'Pause, resume, scale and restart sit next to the history, and a restart stamps the same annotation kubectl writes.',
+                        'Pause, resume and restart sit next to the history, and a restart stamps the same annotation kubectl writes.',
                     ],
                     shot: 'deployment-compare',
                     alt: 'Two deployment revisions compared side by side, with the one added environment variable marked.',
@@ -269,7 +270,7 @@ const faqs: readonly Faq[] = [
                 },
                 {
                     title: 'Destructive kinds ask you to type the name',
-                    body: 'Deleting a node, a CRD or a namespace takes the object’s name, typed out. Those kinds have no bulk delete at all, because a checkbox column and an irreversible action do not belong on the same screen.',
+                    body: 'Deleting a node, a namespace, a CRD, a PersistentVolume, a StorageClass or a cluster role takes the object’s name, typed out. Nodes, namespaces and CRDs have no bulk delete at all.',
                 },
                 {
                     title: 'Secrets cross one key at a time',
@@ -281,11 +282,11 @@ const faqs: readonly Faq[] = [
                 },
                 {
                     title: 'The renderer is sandboxed and stays that way',
-                    body: 'Context isolation on, Node integration off, sandbox on, external links routed to your browser and everything else denied. Electron fuses are flipped at package time so the signed app cannot be started as a plain Node binary.',
+                    body: 'Context isolation on, Node integration off, sandbox on, external links routed to your browser and everything else denied. Electron fuses are flipped at package time so the packaged app cannot be started as a plain Node binary.',
                 },
                 {
                     title: 'Nothing quits out from under a session',
-                    body: 'Quitting ends every port forward, shell, log follow and drain at once, and none of them come back — so the app asks first, in a native dialog that names what is about to stop rather than asking in the abstract.',
+                    body: 'Quitting ends every port forward, shell, log follow and drain at once, and none of them come back — so the app asks first, in a native dialog that spells out what quitting ends.',
                 },
             ].map((item) => (
                 <div class="rounded-2xl border border-line bg-bg p-7">
