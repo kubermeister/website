@@ -37,7 +37,9 @@ Scopes here are `repo`, `content`, `docs`, `design`, `seo`, `build`, `ci`, `deps
 
 - **Marketing pages own the root**; Starlight owns `/docs/`. The prefix comes from `generateId` in
   `src/content.config.ts`, so files stay at `src/content/docs/<section>/<page>.md` and only the
-  route gains it. The sidebar in `astro.config.mjs` autogenerates from the prefixed directories.
+  route gains it. The sidebar's `autogenerate` directories in `astro.config.mjs` are **unprefixed**
+  (`start`, not `docs/start`): Starlight matches them against the file path under
+  `src/content/docs/`, not the entry id, so a prefixed one matches nothing and its group is empty.
 - `trailingSlash: 'always'`. GitHub Pages serves directory indexes and has no redirect rules, so
   one slash style has to win or every page is reachable at two URLs. Canonicals are emitted to
   match.
