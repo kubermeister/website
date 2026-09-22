@@ -1,0 +1,157 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/jetbrains-mono';
+
+/* The site follows Starlight's theming mechanism rather than a second one of its own: the theme is
+   an attribute on <html>, so the toggle in the marketing header and the one in the docs are the
+   same control and the choice carries across the whole site. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* ───────────── Cobalt · light. The palette is the app's own (src/renderer/styles/globals.css),
+   so a screenshot sits on the page without a seam. ───────────── */
+:root {
+    --km-bg: #f7f7f4;
+    --km-surface: #ffffff;
+    --km-surface-2: #f1f1ed;
+    --km-fg: #18181b;
+    --km-fg-2: #3f3f46;
+    --km-muted: #6b6b72;
+    --km-dim: #6e6e77;
+    --km-border: #e4e4df;
+    --km-border-hi: #cfcfc9;
+    --km-accent: #3d5bd6;
+    --km-accent-strong: #2a45b0;
+    --km-accent-contrast: #ffffff;
+    --km-accent-bg: rgb(61 91 214 / 0.08);
+    --km-ok: #0f9a6e;
+    --km-warn: #c77a05;
+    --km-danger: #d24545;
+    --km-code-bg: #f3f3ee;
+    --km-shadow: 0 1px 2px rgb(24 24 27 / 0.04), 0 8px 24px -12px rgb(24 24 27 / 0.12);
+    color-scheme: light;
+}
+
+/* ───────────── Cobalt · dark ───────────── */
+[data-theme='dark'] {
+    --km-bg: #0b0d10;
+    --km-surface: #14171c;
+    --km-surface-2: #1b1f26;
+    --km-fg: #eef0f4;
+    --km-fg-2: #b7bcc6;
+    --km-muted: #7a808b;
+    --km-dim: #8a909b;
+    --km-border: #262a31;
+    --km-border-hi: #353a43;
+    --km-accent: #5b7cff;
+    --km-accent-strong: #90a6ff;
+    --km-accent-contrast: #0b0d10;
+    --km-accent-bg: rgb(91 124 255 / 0.12);
+    --km-ok: #3dcb87;
+    --km-warn: #f5b042;
+    --km-danger: #f26565;
+    --km-code-bg: #08090c;
+    --km-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 16px 48px -24px rgb(0 0 0 / 0.8);
+    color-scheme: dark;
+}
+
+@theme inline {
+    --color-bg: var(--km-bg);
+    --color-surface: var(--km-surface);
+    --color-surface-2: var(--km-surface-2);
+    --color-fg: var(--km-fg);
+    --color-fg-2: var(--km-fg-2);
+    --color-muted: var(--km-muted);
+    --color-dim: var(--km-dim);
+    --color-line: var(--km-border);
+    --color-line-hi: var(--km-border-hi);
+    --color-accent: var(--km-accent);
+    --color-accent-strong: var(--km-accent-strong);
+    --color-accent-contrast: var(--km-accent-contrast);
+    --color-accent-bg: var(--km-accent-bg);
+    --color-ok: var(--km-ok);
+    --color-warn: var(--km-warn);
+    --color-danger: var(--km-danger);
+    --color-code-bg: var(--km-code-bg);
+
+    --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace;
+
+    /* A marketing scale, not the app's dense one: the product is 13px because it shows a thousand
+       rows, a landing page is not. */
+    --text-display: 3.75rem;
+    --text-display--line-height: 1.04;
+    --text-display--letter-spacing: -0.035em;
+    --text-h1: 2.75rem;
+    --text-h1--line-height: 1.1;
+    --text-h1--letter-spacing: -0.03em;
+    --text-h2: 1.875rem;
+    --text-h2--line-height: 1.2;
+    --text-h2--letter-spacing: -0.02em;
+    --text-h3: 1.1875rem;
+    --text-h3--line-height: 1.35;
+    --text-h3--letter-spacing: -0.012em;
+    --text-lead: 1.1875rem;
+    --text-lead--line-height: 1.65;
+
+    --radius-card: 12px;
+    --shadow-card: var(--km-shadow);
+    --container-prose: 68ch;
+}
+
+@layer base {
+    html {
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        scroll-behavior: smooth;
+        /* Anchored headings must clear the sticky header. */
+        scroll-padding-top: 5.5rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
+
+    body {
+        background-color: var(--km-bg);
+        color: var(--km-fg);
+        font-feature-settings: 'cv11', 'ss01';
+        text-rendering: optimizeLegibility;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--km-accent);
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+
+    ::selection {
+        background: var(--km-accent-bg);
+    }
+
+    /* Images and iframes reserve their box so nothing on the page moves while it loads. */
+    img,
+    video {
+        height: auto;
+        max-width: 100%;
+    }
+}
+
+@utility container-page {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 72rem;
+    padding-inline: 1.25rem;
+}
+
+/* The one decorative element: a faint grid that fades out, standing in for the empty hero
+   background without a gradient mesh or an animation. */
+@utility hero-grid {
+    background-image:
+        linear-gradient(to right, color-mix(in oklab, var(--km-border) 70%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in oklab, var(--km-border) 70%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 20%, transparent 75%);
+}

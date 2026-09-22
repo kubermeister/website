@@ -1,0 +1,12 @@
+{
+  "version": "0.4.9",
+  "publishedAt": "2026-09-21T14:23:20Z",
+  "htmlUrl": "https://github.com/kubermeister/kubermeister/releases/tag/v0.4.9",
+  "assets": [
+    "Kubermeister-0.4.9-mac-arm64.dmg",
+    "Kubermeister-0.4.9-mac-x64.dmg",
+    "Kubermeister-0.4.9-win-x64.exe",
+    "Kubermeister-0.4.9-linux-x86_64.AppImage",
+    "Kubermeister-0.4.9-linux-amd64.deb"
+  ]
+}

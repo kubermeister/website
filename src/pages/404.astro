@@ -1,0 +1,35 @@
+---
+import Page from '../layouts/Page.astro';
+import { SITE } from '../lib/site';
+---
+
+<Page title="Page not found" description="That page does not exist on kubermeister.io." path="/404/" noindex>
+    <div class="container-page flex min-h-[60vh] flex-col items-center justify-center py-20 text-center">
+        <p class="font-mono text-sm text-accent">404</p>
+        <h1 class="mt-4 text-h1 font-semibold text-balance">That page is not here</h1>
+        <p class="mt-5 max-w-md text-lead text-pretty text-muted">
+            The link may be out of date, or the page may have moved as the documentation grew.
+        </p>
+        <div class="mt-9 flex flex-wrap justify-center gap-3">
+            <a
+                href="/"
+                class="rounded-xl bg-accent px-5 py-3 text-sm font-medium text-accent-contrast transition-colors hover:bg-accent-strong"
+            >
+                Go home
+            </a>
+            <a
+                href="/docs/"
+                class="rounded-xl border border-line px-5 py-3 text-sm transition-colors hover:border-line-hi"
+            >
+                Browse the docs
+            </a>
+            <a
+                href={SITE.issues}
+                rel="noopener"
+                class="rounded-xl border border-line px-5 py-3 text-sm transition-colors hover:border-line-hi"
+            >
+                Report a broken link
+            </a>
+        </div>
+    </div>
+</Page>

@@ -1,0 +1,45 @@
+---
+title: Deployments and rollouts
+description: Watching a Kubernetes rollout in Kubermeister, comparing two revisions of a pod template, and rolling back with a patch that actually undoes the change.
+sidebar:
+  order: 1
+---
+
+A Deployment's detail page carries its ReplicaSets, its revision history and its rollout status,
+alongside the usual tabs.
+
+## Rollout status
+
+What the rollout is doing now: how many replicas are updated, ready and available, and whether it is
+progressing, complete or stuck.
+
+## Comparing revisions
+
+Pick two revisions and the app puts their pod templates side by side.
+
+Both sides go through the same canonicalisation the rollback's skip check uses — keys ordered, blanks
+dropped, the controller's own `pod-template-hash` label ignored — because the API server fills the two
+copies out differently. Without that, a diff is full of differences nobody made.
+
+The diff itself is a plain line diff, so it stays readable and predictable.
+
+## Rolling back
+
+A rollback restores a revision's pod template with a **JSON patch**, never a strategic merge.
+
+That distinction matters: a strategic merge merges container lists _by name_, so a container added
+after the target revision would survive the very rollback meant to undo it. A JSON patch replaces the
+template outright.
+
+If the revision you picked already matches the live template, the app reports it as **skipped** rather
+than writing a no-op rollout.
+
+## Pausing
+
+Pause and resume are available from the same place, and go through the same guard as every other
+write — see [writing to the cluster](/docs/workloads/writing/).
+
+## ReplicaSets
+
+ReplicaSets and ReplicationControllers list as their own kinds, each row naming the controller above
+it from its owner reference. That is the only way to tell two rollouts of one deployment apart.

@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Answer engines are told the same thing as search engines: everything here is public.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://kubermeister.io/sitemap-index.xml

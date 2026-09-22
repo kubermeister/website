@@ -1,0 +1,53 @@
+---
+interface Props {
+    command: string;
+    label?: string;
+}
+
+const { command, label = 'Copy command' } = Astro.props;
+---
+
+<div class="flex items-center gap-3 rounded-xl border border-line bg-code-bg px-4 py-3 font-mono text-sm">
+    <span aria-hidden="true" class="text-dim select-none">
+        $
+    </span>
+    <code class="flex-1 overflow-x-auto whitespace-nowrap text-fg-2">{command}</code>
+    <button
+        type="button"
+        class="shrink-0 rounded-md p-1.5 text-dim transition-colors hover:bg-surface-2 hover:text-fg"
+        data-copy={command}
+        aria-label={label}
+    >
+        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <rect x="9" y="9" width="11" height="11" rx="2"></rect>
+            <path d="M5 15V5a2 2 0 0 1 2-2h8"></path>
+        </svg>
+    </button>
+</div>
+
+<script>
+    for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {
+        button.addEventListener('click', async () => {
+            const command = button.dataset.copy;
+            if (!command) return;
+            try {
+                await navigator.clipboard.writeText(command);
+            } catch {
+                return; // No clipboard permission; the text is selectable either way.
+            }
+            const previous = button.getAttribute('aria-label');
+            button.setAttribute('aria-label', 'Copied');
+            button.dataset.copied = 'true';
+            setTimeout(() => {
+                button.dataset.copied = 'false';
+                if (previous) button.setAttribute('aria-label', previous);
+            }, 1600);
+        });
+    }
+</script>
+
+<style>
+    [data-copied='true'] {
+        color: var(--km-ok);
+    }
+</style>

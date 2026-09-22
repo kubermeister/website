@@ -1,0 +1,52 @@
+---
+title: Your first five minutes
+description: A short tour of Kubermeister — check the connection, find a workload, read its logs, shell into a pod and forward a port.
+sidebar:
+  order: 3
+---
+
+Kubermeister reads the kubeconfig you already have. If `kubectl get pods` works in your terminal,
+the app works too.
+
+## 1. Check the connection
+
+The top bar tells you which context you are on. If something is wrong with the kubeconfig or the
+context, a notice appears there with the ways out: try again, choose a different kubeconfig, or use
+the default. The app shell always loads, even when no cluster will answer.
+
+## 2. Find a workload
+
+Open **Workloads → Deployments**. The list is live — it watches the API server rather than polling,
+so a rollout appears as it happens. Type in the search box to narrow to the rows you want.
+
+## 3. Read its logs
+
+Open a deployment and go to its **Logs** tab. It is already following, and it is following _every_
+pod the deployment owns at once, merged in arrival order and coloured by pod. There is no API call
+for "the logs of this deployment", so the app opens one stream per pod and restarts the set when the
+pods change.
+
+Search narrows the console. Turn on **Highlight** in the View menu if you would rather keep every
+line and mark the matches where they sit.
+
+## 4. Shell into a pod
+
+Open one of its pods and choose the **Shell** tab. The session opens with the tab and ends when you
+leave, which is how a shell is closed — nothing is left attached in the background.
+
+## 5. Forward a port
+
+From a Service or a pod, start a port forward. Forwards are listed in the top bar and stopped from
+there, wherever you started them. A forward aimed at a Service resolves a ready endpoint per
+connection, so the next rollout does not end it.
+
+## 6. Look at the cluster
+
+**Cluster → Summary** puts node and pod health, usage and recent events on one screen. The usage
+charts are sampled while the app is open — they start empty on every launch and reset when you
+switch context, so they never claim history the app does not have.
+
+## Next
+
+[Contexts and namespaces](/docs/clusters/contexts-namespaces/), or jump to
+[logs](/docs/sessions/logs/).
