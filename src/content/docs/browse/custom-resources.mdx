@@ -1,0 +1,46 @@
+---
+title: Custom resources and CRDs
+description: Browsing CustomResourceDefinitions and their instances in Kubermeister, with the additionalPrinterColumns kubectl get would print.
+sidebar:
+  order: 4
+---
+
+import Figure from '@/components/docs/Figure.astro';
+
+The app cannot know your CRDs in advance, so everything a custom resource row shows comes from the
+definition itself.
+
+## What a row shows
+
+For each definition, the app reads:
+
+<Figure
+  name="crd-instances"
+  alt="Instances of a custom resource definition, listed with the columns the definition declares."
+  caption="The columns come from the definition’s own additionalPrinterColumns."
+/>
+
+- its **storage version**, or the first served version if none is marked for storage;
+- its **scope**, namespaced or cluster-wide;
+- its **`additionalPrinterColumns`** — the same columns `kubectl get` would print for that kind.
+
+Those columns are then evaluated against each instance.
+
+## The JSONPath subset
+
+Printer columns declare a JSONPath. The app evaluates the subset those columns actually use: dotted
+keys, `['quoted']` keys and `[0]` indexes.
+
+Filters and wildcards are **refused rather than half-evaluated**, because a column that quietly
+produces the wrong value is worse than one that says it cannot be read.
+
+## Editing
+
+Editing a custom resource rides the same replace call as every other kind, since that call derives
+the API path from the manifest's own `apiVersion` and `kind`. The editor's pin takes a kind _name_
+rather than a built-in kind, and scope is only checked for kinds the app knows about.
+
+## The definitions themselves
+
+CustomResourceDefinitions are listed as a kind of their own. They are also in the set that asks you
+to type the name before deleting — removing a definition removes every instance of it.

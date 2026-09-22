@@ -19,6 +19,3 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
-
-# Written by scripts/screenshots.mjs for the throwaway cluster it starts.
-.screenshots.kubeconfig

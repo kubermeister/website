@@ -6,7 +6,7 @@
  * whoever is submitting controls the host. Set the same value as the INDEXNOW_KEY repository
  * variable and as the name of the file in `public/`.
  */
-const HOST = 'kubermeister.io';
+const HOST = 'kubermeister.com';
 
 const key = process.env.INDEXNOW_KEY;
 if (!key) {

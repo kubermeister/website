@@ -3,7 +3,7 @@
  * repeating an origin, a repository URL or a product sentence that would then drift.
  */
 export const SITE = {
-    origin: 'https://kubermeister.io',
+    origin: 'https://kubermeister.com',
     name: 'Kubermeister',
     /** The one-line answer to "what is this", reused as the default meta description. */
     tagline: 'A fast, native desktop client for Kubernetes',

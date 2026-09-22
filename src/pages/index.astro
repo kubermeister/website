@@ -1,6 +1,6 @@
 ---
-import { Image } from 'astro:assets';
 import Page from '../layouts/Page.astro';
+import Shot from '../components/Shot.astro';
 import Section from '../components/Section.astro';
 import DownloadCta from '../components/DownloadCta.astro';
 import CopyLine from '../components/CopyLine.astro';
@@ -11,13 +11,6 @@ import { page } from '../lib/pages';
 import { faqPage, type Faq } from '../lib/schema';
 import { latestRelease } from '../lib/release';
 import { SITE } from '../lib/site';
-import overview from '../assets/screenshots/overview.png';
-import logsShot from '../assets/screenshots/logs.png';
-import rolloutShot from '../assets/screenshots/rollout.png';
-import drainShot from '../assets/screenshots/drain.png';
-import podsShot from '../assets/screenshots/pods.png';
-import shellShot from '../assets/screenshots/shell.png';
-import helmShot from '../assets/screenshots/helm.png';
 
 const meta = page('/');
 const release = await latestRelease();
@@ -92,14 +85,12 @@ const faqs: readonly Faq[] = [
 
         <div class="container-page relative pb-16">
             <div class="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
-                <Image
-                    src={overview}
+                <Shot
+                    name="summary"
                     alt="The Kubermeister cluster summary: node health, cluster CPU and memory usage charts, recent events and alerts."
                     widths={[720, 1080, 1440, 1920]}
                     sizes="(min-width: 1152px) 1088px, calc(100vw - 2.5rem)"
-                    loading="eager"
-                    decoding="sync"
-                    fetchpriority="high"
+                    eager
                     class="w-full"
                 />
             </div>
@@ -140,7 +131,7 @@ const faqs: readonly Faq[] = [
                         'An unfinished regular expression reads as “no filter yet” instead of emptying the console mid-keystroke.',
                         'Tens of thousands of lines cost a screenful of DOM, because only the rows in view are rendered.',
                     ],
-                    image: logsShot,
+                    shot: 'workload-logs',
                     alt: 'The Kubermeister log console following all three pods of a deployment at once, each pod\u2019s lines coloured.',
                     href: '/docs/sessions/logs/',
                 },
@@ -153,7 +144,7 @@ const faqs: readonly Faq[] = [
                         'A revision whose template already matches the live one is reported as skipped rather than written.',
                         'Pause, resume, scale and restart sit next to the history, and a restart stamps the same annotation kubectl writes.',
                     ],
-                    image: rolloutShot,
+                    shot: 'deployment-compare',
                     alt: 'Two deployment revisions compared side by side, with the one added environment variable marked.',
                     href: '/docs/workloads/rollouts/',
                 },
@@ -166,7 +157,7 @@ const faqs: readonly Faq[] = [
                         'Stopping ends the drain at once and leaves the node cordoned — undoing that is your decision, not the app’s.',
                         'Cordon is a patch on spec.unschedulable and nothing else, so it reads the same to every other tool.',
                     ],
-                    image: drainShot,
+                    shot: 'node-drain-plan',
                     alt: 'The drain dialog, showing how many pods would be evicted and how many are left alone.',
                     href: '/docs/operations/nodes/',
                 },
@@ -205,13 +196,11 @@ const faqs: readonly Faq[] = [
                     </div>
                     <div class:list={[index % 2 === 1 && 'lg:order-1']}>
                         <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-card">
-                            <Image
-                                src={block.image}
+                            <Shot
+                                name={block.shot}
                                 alt={block.alt}
                                 widths={[560, 840, 1120]}
                                 sizes="(min-width: 1024px) 544px, calc(100vw - 2.5rem)"
-                                loading="lazy"
-                                decoding="async"
                                 class="w-full"
                             />
                         </div>
@@ -232,21 +221,21 @@ const faqs: readonly Faq[] = [
         <div class="mt-14 grid gap-6 lg:grid-cols-3">
             {[
                 {
-                    image: podsShot,
+                    shot: 'pods-list',
                     title: 'Live lists',
                     body: 'Watched rather than polled, with usage meters per pod and only the rows in view rendered.',
                     alt: 'The Kubermeister pods list, live, with CPU and memory meters on each row.',
                     href: '/docs/browse/lists/',
                 },
                 {
-                    image: shellShot,
+                    shot: 'pod-shell',
                     title: 'A shell in its pod',
                     body: 'The exec session lives in the pod\u2019s own tab, opens with it and ends when you leave.',
                     alt: 'A shell session inside a pod in Kubermeister, showing the output of ps and cat /etc/hosts.',
                     href: '/docs/sessions/shell/',
                 },
                 {
-                    image: helmShot,
+                    shot: 'helm-release',
                     title: 'Helm releases',
                     body: 'Decoded from the Secrets Helm writes, so a rollback stays readable by the Helm CLI.',
                     alt: 'The Kubermeister Helm releases list, showing a release and its revision.',
@@ -255,13 +244,11 @@ const faqs: readonly Faq[] = [
             ].map((item) => (
                 <a href={item.href} class="group block">
                     <div class="overflow-hidden rounded-xl border border-line bg-surface transition-colors group-hover:border-accent">
-                        <Image
-                            src={item.image}
+                        <Shot
+                            name={item.shot}
                             alt={item.alt}
                             widths={[360, 720, 1080]}
                             sizes="(min-width: 1024px) 352px, calc(100vw - 2.5rem)"
-                            loading="lazy"
-                            decoding="async"
                             class="w-full"
                         />
                     </div>
@@ -303,7 +290,7 @@ const faqs: readonly Faq[] = [
                 },
                 {
                     title: 'Nothing quits out from under a session',
-                    body: 'On macOS, ⌘Q has to be held, because one keystroke away from ⌘W sits the end of every port forward, shell, log follow and drain — and none of them come back.',
+                    body: 'Quitting ends every port forward, shell, log follow and drain at once, and none of them come back — so the app asks first, in a native dialog that names what is about to stop rather than asking in the abstract.',
                 },
             ].map((item) => (
                 <div class="rounded-2xl border border-line bg-bg p-7">

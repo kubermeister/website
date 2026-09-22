@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+    /** A shot name from the app's screenshot harness, without the theme directory or extension. */
+    name: string;
+    alt: string;
+    widths: number[];
+    sizes: string;
+    /** The hero shot is the largest contentful paint, so it loads eagerly. */
+    eager?: boolean;
+    class?: string;
+}
+
+const { name, alt, widths, sizes, eager = false, class: className } = Astro.props;
+
+// The harness photographs every screen in both themes, so the site shows the one that matches the
+// page. Both are in the markup and CSS picks: a lazy image inside a hidden element is not fetched
+// until it is shown, so only the hero pays for the pair it cannot defer.
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/screenshots/*/*.webp', {
+    eager: true,
+});
+
+const source = (theme: 'dark' | 'light') => {
+    const found = files[`../assets/screenshots/${theme}/${name}.webp`];
+    if (!found) throw new Error(`no ${theme} screenshot named "${name}" — run npm run screenshots:sync`);
+    return found.default;
+};
+
+const shared = {
+    alt,
+    widths,
+    sizes,
+    loading: eager ? ('eager' as const) : ('lazy' as const),
+    decoding: eager ? ('sync' as const) : ('async' as const),
+    ...(eager ? { fetchpriority: 'high' as const } : {}),
+};
+---
+
+<Image src={source('light')} {...shared} class:list={[className, 'km-shot', 'km-shot-light']} />
+<Image src={source('dark')} {...shared} class:list={[className, 'km-shot', 'km-shot-dark']} />
+
+<style>
+    /* Deliberately not Tailwind's `hidden dark:block`: under Tailwind 4 the `dark` variant is a
+       `:where()` clause, which adds no specificity, so `.hidden` and `.dark\:block` tie and source
+       order decides — and it decided both images were hidden. An attribute selector on the ancestor
+       outranks the class, so this pair cannot tie. */
+    .km-shot-dark {
+        display: none;
+    }
+
+    :global([data-theme='dark']) .km-shot-light {
+        display: none;
+    }
+
+    :global([data-theme='dark']) .km-shot-dark {
+        display: block;
+    }
+</style>

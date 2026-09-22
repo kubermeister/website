@@ -9,8 +9,8 @@
     "check": "astro check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "screenshots": "node scripts/screenshots.mjs",
-    "astro": "astro"
+    "astro": "astro",
+    "screenshots:sync": "node scripts/sync-screenshots.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

@@ -1,4 +1,4 @@
-# kubermeister.io
+# kubermeister.com
 
 The marketing site and documentation for Kubermeister. The application itself lives in
 [`kubermeister/kubermeister`](https://github.com/kubermeister/kubermeister); this repository
@@ -75,14 +75,18 @@ Scopes here are `repo`, `content`, `docs`, `design`, `seo`, `build`, `ci`, `deps
 
 ### Screenshots
 
-- **Every screenshot is the real app**, captured by `scripts/screenshots.mjs` against a throwaway
-  k3s container — the same image and seed fixtures the app's end-to-end suite uses, plus a chattier
-  demo workload that lives in the script rather than in those fixtures so no test starts depending
-  on it. Nothing ever touches a real cluster or a developer's kubeconfig.
-- The script resolves Playwright and Testcontainers from the app checkout, so this repository does
-  not carry them for one script.
-- `KM_SHOTS=name,name` re-takes a subset. The summary screenshot is captured last, because the
-  sampler has to have run for a couple of minutes before its chart is worth photographing.
+- **The harness lives in the application repository**, not here: `npm run build && npm run
+screenshots` there drives the built app against its own demo cluster and writes
+  `docs/screenshots/<theme>/<shot>.png` in both themes. That repository generates its set and
+  commits none of it (kubermeister/kubermeister#315); this one commits the handful it renders,
+  because the site has to build in CI with no Docker and no app checkout.
+- `npm run screenshots:sync` copies the shots in `WANTED` out of that checkout. A shot the harness
+  no longer produces fails the sync rather than leaving a page pointing at a stale image.
+- **Never add a second harness here.** Two would drift, and the one over there already has the demo
+  seed, the deliberately broken workloads the alerts panel needs, and both themes.
+- `src/components/Shot.astro` renders the pair and lets CSS pick, so a light page shows the light
+  screenshot. A lazy image inside a hidden element is not fetched until it is shown, so only the
+  hero pays for the pair it cannot defer.
 
 ### Deployment
 
