@@ -6,7 +6,6 @@ import DownloadCta from '../components/DownloadCta.astro';
 import CopyLine from '../components/CopyLine.astro';
 import Icon from '../components/Icon.astro';
 import { FEATURES } from '../lib/features';
-import { COMPETITORS } from '../lib/compare';
 import { page } from '../lib/pages';
 import { faqPage, type Faq } from '../lib/schema';
 import { latestRelease } from '../lib/release';
@@ -297,28 +296,6 @@ const faqs: readonly Faq[] = [
                     <h3 class="text-h3 font-semibold text-fg">{item.title}</h3>
                     <p class="mt-2.5 text-sm leading-relaxed text-muted">{item.body}</p>
                 </div>
-            ))}
-        </div>
-    </Section>
-
-    <!-- Compare -->
-    <Section
-        eyebrow="Compare"
-        title="Already using something else?"
-        lead="Honest comparisons, including the cases where the other tool is the right answer."
-        center
-        class="border-t border-line bg-surface/30"
-    >
-        <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {COMPETITORS.map((entry) => (
-                <a
-                    href={`/compare/${entry.slug}/`}
-                    class="group rounded-2xl border border-line bg-bg p-6 transition-colors hover:border-accent"
-                >
-                    <p class="text-xs tracking-widest text-dim uppercase">Compare</p>
-                    <h3 class="mt-2 text-h3 font-semibold text-fg group-hover:text-accent">vs {entry.name}</h3>
-                    <p class="mt-2 text-sm text-muted">{entry.kind}</p>
-                </a>
             ))}
         </div>
     </Section>

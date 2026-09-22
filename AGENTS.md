@@ -51,10 +51,7 @@ Scopes here are `repo`, `content`, `docs`, `design`, `seo`, `build`, `ci`, `deps
 
 ### Content
 
-- **Claims about Kubermeister come from how the app behaves.** `src/lib/compare.ts` also carries
-  claims about other tools: those stay to characteristics that are stable and checkable, nothing
-  version- or price-specific, and each competitor entry lists in `verify` what a maintainer should
-  re-read before trusting it. A comparison that gets a rival's facts wrong is worth less than none.
+- **Claims about Kubermeister come from how the app behaves**, not from how it is positioned.
 - The changelog is fetched from the app repository's `CHANGELOG.md` at build time; the release is
   fetched from the GitHub API with `src/data/release.json` as the fallback, because a site that
   fails to build is worse than one a release behind.
