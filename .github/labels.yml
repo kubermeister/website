@@ -1,0 +1,77 @@
+# Every label on the repository, as code. .github/workflows/labels.yml syncs this file on every push
+# to main that changes it and deletes any label not listed here, so a label change is a pull request.
+# Groups share a colour: area (exactly one per issue), priority and size (set at triage), and the
+# status and resolution words.
+#
+# Issue *types* are not labels: this repository uses the organization's Task, Bug and Feature types,
+# set with `gh issue create --type`.
+
+# Area: which part of the site. Exactly one per issue.
+- name: 'area: content'
+  color: 1d76db
+  description: Marketing pages and the words on them
+- name: 'area: docs'
+  color: 1d76db
+  description: The documentation under /docs/
+- name: 'area: design'
+  color: 1d76db
+  description: Layout, theme, components, typography
+- name: 'area: seo'
+  color: 1d76db
+  description: Metadata, structured data, sitemaps, indexing, answer engines
+- name: 'area: infra'
+  color: 1d76db
+  description: Domains, DNS, Pages, certificates
+- name: 'area: screenshots'
+  color: 1d76db
+  description: The sync from the app's harness and the images it produces
+- name: 'area: build'
+  color: 1d76db
+  description: Astro, Vite, Tailwind and the local toolchain
+- name: 'area: ci'
+  color: 1d76db
+  description: Workflows, deploys and repository automation
+
+# Priority: set at triage.
+- name: 'priority: high'
+  color: d93f0b
+  description: Do this next
+- name: 'priority: normal'
+  color: fbca04
+  description: Do this in turn
+- name: 'priority: low'
+  color: c5def5
+  description: Worth doing, no hurry
+
+# Size: the shape of the work, not an estimate in hours.
+- name: 'size: S'
+  color: d4c5f9
+  description: An hour or two
+- name: 'size: M'
+  color: d4c5f9
+  description: An afternoon
+- name: 'size: L'
+  color: d4c5f9
+  description: More than a day, or worth splitting
+
+# Status.
+- name: ready
+  color: 0e8a16
+  description: Understood well enough to start
+- name: blocked
+  color: e99695
+  description: Waiting on something outside this repository
+- name: needs-info
+  color: fef2c0
+  description: Cannot proceed until a question is answered
+
+# Resolution and housekeeping.
+- name: duplicate
+  color: cfd3d7
+  description: Already tracked elsewhere
+- name: wontfix
+  color: ffffff
+  description: Decided against
+- name: dependencies
+  color: 006b75
+  description: Dependency updates

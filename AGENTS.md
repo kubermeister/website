@@ -19,6 +19,18 @@ The app repository's conventions apply here too: never commit on `main`, branch 
 header of 66 characters or fewer, and write each paragraph of the PR body as one unwrapped line.
 Scopes here are `repo`, `content`, `docs`, `design`, `seo`, `build`, `ci`, `deps`.
 
+### Issues are the plan, and there are no discussions
+
+- **This repository has no Ideas discussion category**, unlike the application repository. Anything
+  worth keeping is an issue, whether or not it is scheduled; there is nowhere else for it to go.
+- An issue carries a type (`--type Task`, `Bug` or `Feature`, which are the organization's), exactly
+  one `area:` label and a `size:` label. A milestone when it belongs to one, which not every issue
+  here does.
+- **Labels are defined in `.github/labels.yml`** and change only through that file, which the
+  `labels.yml` workflow syncs on merge, deleting anything the file does not name. Never add a label
+  by hand: the next sync removes it.
+- A PR that resolves an issue ends its body with the one-line paragraph `Closes #N.`
+
 ## Architecture
 
 ### Routing
