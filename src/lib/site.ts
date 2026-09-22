@@ -23,6 +23,7 @@ export type NavLink = { readonly label: string; readonly href: string };
 
 export const NAV: readonly NavLink[] = [
     { label: 'Features', href: '/#features' },
+    { label: 'Download', href: '/download/' },
     { label: 'Docs', href: '/docs/' },
     { label: 'Changelog', href: '/changelog/' },
 ] as const;
