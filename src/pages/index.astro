@@ -1,0 +1,347 @@
+---
+import Page from '../layouts/Page.astro';
+import Shot from '../components/Shot.astro';
+import Section from '../components/Section.astro';
+import DownloadCta from '../components/DownloadCta.astro';
+import CopyLine from '../components/CopyLine.astro';
+import Icon from '../components/Icon.astro';
+import { FEATURES } from '../lib/features';
+import { page } from '../lib/pages';
+import { faqPage, type Faq } from '../lib/schema';
+import { latestRelease } from '../lib/release';
+import { SITE } from '../lib/site';
+
+const meta = page('/');
+const release = await latestRelease();
+
+const faqs: readonly Faq[] = [
+    {
+        question: 'What is Kubermeister?',
+        answer: 'Kubermeister is a desktop Kubernetes client for macOS, Windows and Linux. It reads your existing kubeconfig and gives you a window onto your clusters: live resource lists, logs, shells, port forwards, Helm releases, node drains and rollouts.',
+    },
+    {
+        question: 'Is Kubermeister free?',
+        answer: 'Yes. It is free and open source, for personal and commercial use alike. There is no account, no licence key, no seat count and no paid tier.',
+    },
+    {
+        question: 'Do I need kubectl installed?',
+        answer: 'No. Kubermeister talks to the API server directly and runs exec credential plugins itself, so a kubeconfig written by aws eks update-kubeconfig or gcloud works without kubectl on your PATH.',
+    },
+    {
+        question: 'Does Kubermeister install anything into my cluster?',
+        answer: 'No. It adds no deployment, no service, no agent and no credential. It uses your kubeconfig and your RBAC, so it can do exactly what you can do and nothing more.',
+    },
+    {
+        question: 'Where does my cluster data go?',
+        answer: 'Nowhere. Kubermeister talks to your API server and to GitHub for update checks. There is no backend, no account and no telemetry service collecting what your clusters contain.',
+    },
+    {
+        question: 'Does it work behind a corporate proxy or with a private certificate authority?',
+        answer: 'Yes. It reads HTTPS_PROXY and HTTP_PROXY per scheme the way kubectl would, honours a proxy-url in the kubeconfig, and lets you set a proxy, a bypass list or an extra CA bundle in Settings. A CA bundle is added to what is already trusted rather than replacing it.',
+    },
+    {
+        question: 'Can I use it with more than one cluster?',
+        answer: 'Yes. Every context in your kubeconfig is listed, and switching one resets every cluster query so a screen never shows the previous cluster while writes already reach the new one.',
+    },
+];
+---
+
+<Page title={meta.title} description={meta.description} path={meta.path} bareTitle schema={[faqPage(faqs)]}>
+    <!-- Hero -->
+    <div class="relative overflow-hidden border-b border-line">
+        <div class="hero-grid pointer-events-none absolute inset-0" aria-hidden="true"></div>
+        <div class="container-page relative pt-20 pb-16 text-center sm:pt-28">
+            <a
+                href="/changelog/"
+                class="inline-flex items-center gap-2 rounded-full border border-line bg-surface/70 px-3.5 py-1.5 text-sm text-muted transition-colors hover:border-line-hi hover:text-fg"
+            >
+                <span class="size-1.5 rounded-full bg-ok"></span>
+                Version {release.version} is out
+                <span aria-hidden="true">→</span>
+            </a>
+
+            <h1 class="mx-auto mt-7 max-w-4xl text-h1 font-semibold text-balance sm:text-display">
+                A fast desktop client for Kubernetes
+            </h1>
+
+            <p class="mx-auto mt-6 max-w-2xl text-lead text-pretty text-muted">
+                Browse live clusters, follow logs, exec into pods, forward ports, manage Helm releases and drain nodes —
+                from one window on macOS, Windows and Linux. No account, no agent in your cluster, no kubectl required.
+            </p>
+
+            <div class="mt-9 flex flex-col items-center">
+                <DownloadCta />
+            </div>
+
+            <div class="mx-auto mt-8 max-w-xl">
+                <CopyLine command="brew install --cask kubermeister/tap/kubermeister" />
+            </div>
+        </div>
+
+        <div class="container-page relative pb-16">
+            <div class="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+                <Shot
+                    name="summary"
+                    alt="The Kubermeister cluster summary: node health, cluster CPU and memory usage charts, recent events and alerts."
+                    widths={[720, 1080, 1440, 1920]}
+                    sizes="(min-width: 1152px) 1088px, calc(100vw - 2.5rem)"
+                    eager
+                    class="w-full"
+                />
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature grid -->
+    <Section
+        id="features"
+        eyebrow="What it does"
+        title="Everything you actually do with a cluster"
+        lead="Not a dashboard that shows you numbers. The operations you reach for on a bad afternoon, built so they hold up on a busy cluster."
+        center
+    >
+        <ul class="mt-14 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {FEATURES.map((feature) => (
+                <li class="bg-bg p-7 transition-colors hover:bg-surface/60">
+                    <a href={feature.href} class="group block">
+                        <Icon name={feature.icon} class="size-5 text-accent" />
+                        <h3 class="mt-4 text-h3 font-semibold text-fg group-hover:text-accent">{feature.title}</h3>
+                        <p class="mt-2.5 text-sm leading-relaxed text-muted">{feature.body}</p>
+                    </a>
+                </li>
+            ))}
+        </ul>
+    </Section>
+
+    <!-- Deep dives -->
+    <div class="border-y border-line bg-surface/30">
+        <div class="container-page divide-y divide-line">
+            {[
+                {
+                    eyebrow: 'Logs',
+                    title: 'A console that is already following',
+                    body: 'Live is on when the tab opens, because a log is opened to see what is happening now and a console you have to switch on first is a step in front of the answer. A controller’s Logs tab follows every pod it owns at once, merged in arrival order and coloured by pod, restarting when the set of pods changes so a replaced pod stops being followed.',
+                    points: [
+                        'Search narrows the console by default, or highlights in place when a hit only makes sense beside what surrounds it.',
+                        'An unfinished regular expression reads as “no filter yet” instead of emptying the console mid-keystroke.',
+                        'Tens of thousands of lines cost a screenful of DOM, because only the rows in view are rendered.',
+                    ],
+                    shot: 'workload-logs',
+                    alt: 'The Kubermeister log console following all three pods of a deployment at once, each pod\u2019s lines coloured.',
+                    href: '/docs/sessions/logs/',
+                },
+                {
+                    eyebrow: 'Rollouts',
+                    title: 'See what changed before you roll it back',
+                    body: 'Two revisions of a pod template, side by side, both run through the same canonicalisation the rollback itself uses — keys ordered, blanks dropped, the controller’s own pod-template-hash ignored — so a difference on screen is one somebody made rather than one the API server filled in.',
+                    points: [
+                        'A rollback restores the template with a JSON patch, not a strategic merge, so a container added since the target revision does not survive the undo.',
+                        'A revision whose template already matches the live one is reported as skipped rather than written.',
+                        'Pause, resume, scale and restart sit next to the history, and a restart stamps the same annotation kubectl writes.',
+                    ],
+                    shot: 'deployment-compare',
+                    alt: 'Two deployment revisions compared side by side, with the one added environment variable marked.',
+                    href: '/docs/workloads/rollouts/',
+                },
+                {
+                    eyebrow: 'Node operations',
+                    title: 'A drain that tells you what it is doing',
+                    body: 'The dialog shows the plan before anything happens, and the drain re-derives that same plan itself, so the screen can never promise one thing and the app carry out another. Then it streams: one line per pod, as it goes.',
+                    points: [
+                        'Eviction goes through the eviction API, so PodDisruptionBudgets still have a say and a 429 means “not now” rather than “failed”.',
+                        'Stopping ends the drain at once and leaves the node cordoned — undoing that is your decision, not the app’s.',
+                        'Cordon is a patch on spec.unschedulable and nothing else, so it reads the same to every other tool.',
+                    ],
+                    shot: 'node-drain-plan',
+                    alt: 'The drain dialog, showing how many pods would be evicted and how many are left alone.',
+                    href: '/docs/operations/nodes/',
+                },
+            ].map((block, index) => (
+                <div class="grid items-center gap-12 py-20 lg:grid-cols-2 lg:gap-16">
+                    <div class:list={[index % 2 === 1 && 'lg:order-2']}>
+                        <p class="text-xs font-semibold tracking-widest text-accent uppercase">{block.eyebrow}</p>
+                        <h2 class="mt-3 text-h2 font-semibold text-balance text-fg">{block.title}</h2>
+                        <p class="mt-4 text-base leading-relaxed text-pretty text-muted">{block.body}</p>
+                        <ul class="mt-6 space-y-3">
+                            {block.points.map((point) => (
+                                <li class="flex gap-3 text-sm leading-relaxed text-fg-2">
+                                    <svg
+                                        class="mt-1 size-4 shrink-0 text-accent"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M5 12l5 5L20 7" />
+                                    </svg>
+                                    <span>{point}</span>
+                                </li>
+                            ))}
+                        </ul>
+                        <a
+                            href={block.href}
+                            class="mt-7 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
+                        >
+                            Read the documentation
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
+                    <div class:list={[index % 2 === 1 && 'lg:order-1']}>
+                        <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-card">
+                            <Shot
+                                name={block.shot}
+                                alt={block.alt}
+                                widths={[560, 840, 1120]}
+                                sizes="(min-width: 1024px) 544px, calc(100vw - 2.5rem)"
+                                class="w-full"
+                            />
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+
+    <!-- A look around -->
+    <Section
+        eyebrow="A look around"
+        title="The same window, doing other work"
+        lead="Every screenshot on this page is the application running against a real cluster, not a mockup."
+        center
+        class="border-t border-line"
+    >
+        <div class="mt-14 grid gap-6 lg:grid-cols-3">
+            {[
+                {
+                    shot: 'pods-list',
+                    title: 'Live lists',
+                    body: 'Watched rather than polled, with usage meters per pod and only the rows in view rendered.',
+                    alt: 'The Kubermeister pods list, live, with CPU and memory meters on each row.',
+                    href: '/docs/browse/lists/',
+                },
+                {
+                    shot: 'pod-shell',
+                    title: 'A shell in its pod',
+                    body: 'The exec session lives in the pod\u2019s own tab, opens with it and ends when you leave.',
+                    alt: 'A shell session inside a pod in Kubermeister, showing the output of ps and cat /etc/hosts.',
+                    href: '/docs/sessions/shell/',
+                },
+                {
+                    shot: 'helm-release',
+                    title: 'Helm releases',
+                    body: 'Decoded from the Secrets Helm writes, so a rollback stays readable by the Helm CLI.',
+                    alt: 'The Kubermeister Helm releases list, showing a release and its revision.',
+                    href: '/docs/operations/helm/',
+                },
+            ].map((item) => (
+                <a href={item.href} class="group block">
+                    <div class="overflow-hidden rounded-xl border border-line bg-surface transition-colors group-hover:border-accent">
+                        <Shot
+                            name={item.shot}
+                            alt={item.alt}
+                            widths={[360, 720, 1080]}
+                            sizes="(min-width: 1024px) 352px, calc(100vw - 2.5rem)"
+                            class="w-full"
+                        />
+                    </div>
+                    <h3 class="mt-4 text-h3 font-semibold text-fg group-hover:text-accent">{item.title}</h3>
+                    <p class="mt-1.5 text-sm leading-relaxed text-muted">{item.body}</p>
+                </a>
+            ))}
+        </div>
+    </Section>
+
+    <!-- Safety -->
+    <Section
+        eyebrow="Safety"
+        title="Built so a bad click cannot become an incident"
+        lead="A graphical client makes destructive things easy to reach. These are the constraints that keep that from being a problem."
+        center
+    >
+        <div class="mt-14 grid gap-6 md:grid-cols-2">
+            {[
+                {
+                    title: 'A write cannot land on the wrong cluster',
+                    body: 'Every write carries the context the screen was rendered under. The app compares it with the context it is on and refuses a mismatch, so a tab left open from before a context switch can never act on the new cluster.',
+                },
+                {
+                    title: 'Destructive kinds ask you to type the name',
+                    body: 'Deleting a node, a CRD or a namespace takes the object’s name, typed out. Those kinds have no bulk delete at all, because a checkbox column and an irreversible action do not belong on the same screen.',
+                },
+                {
+                    title: 'Secrets cross one key at a time',
+                    body: 'A Secret’s values are never handed to the interface as a map. A reveal asks for the single key it needs, the value is held outside the query cache, it masks itself again on a timer, and a copy never renders it at all.',
+                },
+                {
+                    title: 'The app opens no back door',
+                    body: 'No debug container, no privileged pod on a node, no files carried across the exec channel. kubectl debug and kubectl cp are where those belong, and the app does not quietly become a way around your RBAC.',
+                },
+                {
+                    title: 'The renderer is sandboxed and stays that way',
+                    body: 'Context isolation on, Node integration off, sandbox on, external links routed to your browser and everything else denied. Electron fuses are flipped at package time so the signed app cannot be started as a plain Node binary.',
+                },
+                {
+                    title: 'Nothing quits out from under a session',
+                    body: 'Quitting ends every port forward, shell, log follow and drain at once, and none of them come back — so the app asks first, in a native dialog that names what is about to stop rather than asking in the abstract.',
+                },
+            ].map((item) => (
+                <div class="rounded-2xl border border-line bg-bg p-7">
+                    <h3 class="text-h3 font-semibold text-fg">{item.title}</h3>
+                    <p class="mt-2.5 text-sm leading-relaxed text-muted">{item.body}</p>
+                </div>
+            ))}
+        </div>
+    </Section>
+
+    <!-- FAQ -->
+    <Section eyebrow="Questions" title="Frequently asked" center>
+        <div class="mx-auto mt-12 max-w-3xl divide-y divide-line border-y border-line">
+            {faqs.map((faq) => (
+                <details class="group py-5">
+                    <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-left text-base font-medium text-fg">
+                        <h3>{faq.question}</h3>
+                        <svg
+                            class="size-5 shrink-0 text-dim transition-transform group-open:rotate-45"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                    </summary>
+                    <p class="mt-3 pr-9 text-sm leading-relaxed text-muted">{faq.answer}</p>
+                </details>
+            ))}
+        </div>
+    </Section>
+
+    <!-- Final call to action -->
+    <section class="border-t border-line">
+        <div class="container-page py-24 text-center">
+            <h2 class="mx-auto max-w-2xl text-h2 font-semibold text-balance text-fg">Point it at a cluster and see.</h2>
+            <p class="mx-auto mt-4 max-w-xl text-lead text-muted">
+                It reads the kubeconfig you already have and changes nothing about it.
+            </p>
+            <div class="mt-9 flex flex-col items-center">
+                <DownloadCta />
+            </div>
+            <p class="mt-8 text-sm text-dim">
+                Prefer to read first? Start with the
+                <a href="/docs/start/install/" class="text-accent hover:underline">
+                    installation guide
+                </a>
+                or browse the
+                <a href={SITE.repo} rel="noopener" class="text-accent hover:underline">
+                    source on GitHub
+                </a>
+                .
+            </p>
+        </div>
+    </section>
+</Page>

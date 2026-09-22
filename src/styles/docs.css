@@ -1,0 +1,58 @@
+/* Bridges Starlight's theme onto Tailwind's, so a doc page and a marketing page can use the same
+   utilities. Loaded after global.css, which is where the palette itself lives. */
+@import '@astrojs/starlight-tailwind';
+
+/* Starlight's own custom properties, pointed at the Cobalt palette. Only the variables are
+   overridden — none of Starlight's layout is touched, so its upgrades keep working. */
+:root {
+    --sl-font: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --sl-font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace;
+    --sl-content-width: 50rem;
+    --sl-text-code: 0.875rem;
+
+    --sl-color-accent-low: color-mix(in oklab, var(--km-accent) 22%, var(--km-bg));
+    --sl-color-accent: var(--km-accent);
+    --sl-color-accent-high: var(--km-accent-strong);
+
+    --sl-color-white: var(--km-fg);
+    --sl-color-gray-1: var(--km-fg);
+    --sl-color-gray-2: var(--km-fg-2);
+    --sl-color-gray-3: var(--km-muted);
+    --sl-color-gray-4: var(--km-dim);
+    --sl-color-gray-5: var(--km-border-hi);
+    --sl-color-gray-6: var(--km-border);
+    --sl-color-gray-7: var(--km-surface-2);
+    --sl-color-black: var(--km-bg);
+
+    --sl-color-bg: var(--km-bg);
+    --sl-color-bg-nav: color-mix(in oklab, var(--km-bg) 82%, transparent);
+    --sl-color-bg-sidebar: var(--km-bg);
+    --sl-color-bg-inline-code: var(--km-code-bg);
+    --sl-color-text: var(--km-fg-2);
+    --sl-color-text-accent: var(--km-accent);
+    --sl-color-text-invert: var(--km-accent-contrast);
+    --sl-color-hairline: var(--km-border);
+    --sl-color-hairline-light: var(--km-border);
+    --sl-color-hairline-shade: var(--km-border);
+}
+
+/* The docs header is translucent so content scrolls under it, which needs a blur to stay legible. */
+.header {
+    backdrop-filter: saturate(160%) blur(12px);
+}
+
+/* Starlight sets its own heading rhythm; these two are the ones that read too tight beside the
+   marketing pages' scale. */
+.sl-markdown-content h2 {
+    letter-spacing: -0.02em;
+    margin-top: 2.25rem;
+}
+
+.sl-markdown-content h3 {
+    letter-spacing: -0.012em;
+}
+
+/* An inline code span inside a heading should not shrink the heading. */
+.sl-markdown-content :is(h1, h2, h3, h4) code {
+    font-size: 0.92em;
+}

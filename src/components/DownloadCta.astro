@@ -1,0 +1,65 @@
+---
+import { PLATFORMS, downloadUrl } from '../lib/site';
+import { latestRelease } from '../lib/release';
+
+const release = await latestRelease();
+const primary = {
+    macos: PLATFORMS.find((p) => p.id === 'mac-arm64')!,
+    windows: PLATFORMS.find((p) => p.id === 'win-x64')!,
+    linux: PLATFORMS.find((p) => p.id === 'linux-appimage')!,
+};
+
+// The server cannot know the visitor's OS, and GitHub Pages has no redirect to decide it, so every
+// platform is a real link in the HTML and a few lines of script promote the one that matches. A
+// crawler and a visitor with no JavaScript both still get a working download.
+---
+
+<div class="flex flex-col items-center gap-3 sm:flex-row" data-download-cta>
+    <a
+        href={downloadUrl(primary.macos, release.version)}
+        data-download-primary
+        class="inline-flex items-center gap-2.5 rounded-xl bg-accent px-6 py-3.5 text-base font-medium text-accent-contrast shadow-card transition-colors hover:bg-accent-strong"
+    >
+        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <path d="M12 3v12M12 15l-4-4M12 15l4-4M4 17v3h16v-3" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span data-download-label>Download for macOS</span>
+    </a>
+
+    <a
+        href="/download/"
+        class="inline-flex items-center gap-2 rounded-xl border border-line px-5 py-3.5 text-base text-fg-2 transition-colors hover:border-line-hi hover:text-fg"
+    >
+        All platforms
+    </a>
+</div>
+
+<p class="mt-4 text-sm text-dim">
+    <span data-download-version>Version {release.version}</span> · Free and open source · No account required
+</p>
+
+<script
+    define:vars={{
+        links: Object.fromEntries(Object.entries(primary).map(([os, p]) => [os, downloadUrl(p, release.version)])),
+    }}
+>
+    const detect = () => {
+        const hinted = navigator.userAgentData?.platform ?? '';
+        const agent = `${hinted} ${navigator.userAgent}`.toLowerCase();
+        if (agent.includes('mac')) return 'macos';
+        if (agent.includes('win')) return 'windows';
+        if (agent.includes('linux') || agent.includes('android') || agent.includes('x11')) return 'linux';
+        return null;
+    };
+
+    const labels = { macos: 'Download for macOS', windows: 'Download for Windows', linux: 'Download for Linux' };
+    const os = detect();
+    if (os && links[os]) {
+        for (const root of document.querySelectorAll('[data-download-cta]')) {
+            const anchor = root.querySelector('[data-download-primary]');
+            const label = root.querySelector('[data-download-label]');
+            if (anchor) anchor.href = links[os];
+            if (label) label.textContent = labels[os];
+        }
+    }
+</script>

@@ -1,0 +1,139 @@
+---
+import { marked } from 'marked';
+import Page from '../layouts/Page.astro';
+import { changelog, releaseNotesUrl } from '../lib/release';
+import { page } from '../lib/pages';
+import { breadcrumbs } from '../lib/schema';
+import { SITE } from '../lib/site';
+
+const meta = page('/changelog/');
+const entries = await changelog();
+
+// The source is the app repository's own CHANGELOG.md, written by hand, so the markdown is trusted
+// and rendered as-is.
+const rendered = await Promise.all(entries.map(async (entry) => ({ ...entry, html: await marked.parse(entry.body) })));
+
+const formatDate = (date: string | null) =>
+    date
+        ? new Date(`${date}T00:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+        : null;
+---
+
+<Page
+    title={meta.title}
+    description={meta.description}
+    path={meta.path}
+    schema={[
+        breadcrumbs([
+            { name: 'Home', path: '/' },
+            { name: 'Changelog', path: '/changelog/' },
+        ]),
+    ]}
+>
+    <div class="border-b border-line">
+        <div class="container-page py-16 text-center sm:py-20">
+            <h1 class="text-h1 font-semibold text-balance">Changelog</h1>
+            <p class="mx-auto mt-5 max-w-2xl text-lead text-pretty text-muted">
+                What the app now does, and what stopped going wrong — written for somebody deciding whether to update.
+                The full commit-by-commit history is on{' '}
+                <a href={`${SITE.repo}/releases`} rel="noopener" class="text-accent hover:underline">
+                    the releases page
+                </a>
+                .
+            </p>
+        </div>
+    </div>
+
+    <div class="container-page py-14">
+        {rendered.length === 0 && (
+            <p class="text-muted">
+                The changelog could not be read at build time.{' '}
+                <a href={`${SITE.repo}/blob/main/CHANGELOG.md`} rel="noopener" class="text-accent hover:underline">
+                    Read it on GitHub
+                </a>
+                .
+            </p>
+        )}
+
+        <div class="space-y-14">
+            {rendered.map((entry) => (
+                <article class="grid gap-6 border-b border-line pb-14 last:border-0 md:grid-cols-[12rem_1fr] md:gap-10">
+                    <header class="md:text-right">
+                        <h2 id={`v${entry.version}`} class="scroll-mt-24 text-h3 font-semibold text-fg">
+                            {entry.version === 'Unreleased' ? 'Unreleased' : entry.version}
+                        </h2>
+                        {formatDate(entry.date) && <p class="mt-1 text-sm text-dim">{formatDate(entry.date)}</p>}
+                        {entry.version !== 'Unreleased' && (
+                            <a
+                                href={releaseNotesUrl(entry.version)}
+                                rel="noopener"
+                                class="mt-2 inline-block text-sm text-accent hover:underline"
+                            >
+                                Release →
+                            </a>
+                        )}
+                    </header>
+                    <div class="changelog-body" set:html={entry.html} />
+                </article>
+            ))}
+        </div>
+    </div>
+</Page>
+
+<style is:global>
+    .changelog-body h3 {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--km-accent);
+        margin-top: 1.75rem;
+    }
+
+    .changelog-body h3:first-child {
+        margin-top: 0;
+    }
+
+    .changelog-body ul {
+        margin-top: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+    }
+
+    .changelog-body li {
+        position: relative;
+        padding-left: 1.125rem;
+        color: var(--km-fg-2);
+        line-height: 1.65;
+    }
+
+    .changelog-body li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.65em;
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        background: var(--km-border-hi);
+    }
+
+    .changelog-body a {
+        color: var(--km-accent);
+        text-decoration: underline;
+    }
+
+    .changelog-body code {
+        font-family: var(--font-mono);
+        font-size: 0.85em;
+        background: var(--km-code-bg);
+        border-radius: 4px;
+        padding: 0.1em 0.35em;
+    }
+
+    .changelog-body p {
+        color: var(--km-fg-2);
+        line-height: 1.7;
+    }
+</style>

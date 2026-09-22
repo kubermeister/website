@@ -1,0 +1,100 @@
+---
+import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
+import { SITE, absolute } from '../lib/site';
+import { graph, organization, website, webPage, softwareApplication } from '../lib/schema';
+import { latestRelease } from '../lib/release';
+
+type Node = Record<string, unknown>;
+
+interface Props {
+    title: string;
+    description: string;
+    /** Site-relative path with a trailing slash, e.g. `/download/`. */
+    path: string;
+    /** Extra JSON-LD nodes merged into the page's single graph. */
+    schema?: readonly Node[];
+    /** Overrides the generated social card. */
+    image?: string;
+    noindex?: boolean;
+    /** Set on pages whose <title> already reads as the whole brand, so it is not suffixed twice. */
+    bareTitle?: boolean;
+}
+
+const { title, description, path, schema = [], image, noindex = false, bareTitle = false } = Astro.props;
+
+const release = await latestRelease();
+const canonical = absolute(path);
+const documentTitle = bareTitle ? title : `${title} · ${SITE.name}`;
+const socialImage = absolute(image ?? `/og${path === '/' ? '/index' : path.replace(/\/$/, '')}.png`);
+
+const nodes: Node[] = [
+    organization(),
+    website(),
+    softwareApplication(release.version, release.publishedAt),
+    webPage({ url: canonical, title: documentTitle, description }),
+    ...schema,
+];
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{documentTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+{!noindex && (
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+)}
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#f7f7f4" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0b0d10" media="(prefers-color-scheme: dark)" />
+<meta name="color-scheme" content="light dark" />
+
+<link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="alternate" type="application/rss+xml" title={`${SITE.name} releases`} href={`${SITE.repo}/releases.atom`} />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={documentTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={socialImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={documentTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={socialImage} />
+{SITE.social && <meta name="twitter:site" content={SITE.social} />}
+
+<script is:inline>
+    // Applies the stored theme before first paint, so the page never flashes the wrong one. The key
+    // is Starlight's, so a choice made in the docs and one made here are the same choice.
+    (() => {
+        const stored = (() => {
+            try {
+                return localStorage.getItem('starlight-theme');
+            } catch {
+                return null;
+            }
+        })();
+        const theme =
+            stored === 'light' || stored === 'dark'
+                ? stored
+                : matchMedia('(prefers-color-scheme: light)').matches
+                  ? 'light'
+                  : 'dark';
+        document.documentElement.dataset.theme = theme;
+    })();
+</script>
+
+<script type="application/ld+json" is:inline set:html={graph(nodes)}></script>

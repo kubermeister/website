@@ -1,0 +1,52 @@
+---
+import Logo from '../Logo.astro';
+
+// Replaces Starlight's site title so the docs header carries the product mark and a way back to
+// the marketing site, which is the only navigation Starlight does not provide itself.
+---
+
+<a href="/" class="km-site-title">
+    <Logo class="km-mark" />
+    <span translate="no">Kubermeister</span>
+    <span class="km-docs-tag">Docs</span>
+</a>
+
+<style>
+    .km-site-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: var(--sl-text-h4);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--sl-color-white);
+        text-decoration: none;
+        white-space: nowrap;
+        min-width: 0;
+    }
+
+    .km-mark {
+        width: 1.5rem;
+        height: 1.5rem;
+        flex-shrink: 0;
+        fill: none;
+        color: var(--sl-color-text-accent);
+    }
+
+    .km-docs-tag {
+        border: 1px solid var(--sl-color-hairline);
+        border-radius: 999px;
+        padding: 0.05rem 0.5rem;
+        font-size: 0.6875rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--sl-color-gray-3);
+    }
+
+    @media (max-width: 30rem) {
+        .km-docs-tag {
+            display: none;
+        }
+    }
+</style>

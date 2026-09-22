@@ -1,0 +1,45 @@
+{
+  "name": "kubermeister-website",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "astro": "astro",
+    "screenshots:sync": "node scripts/sync-screenshots.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/starlight": "^0.42.2",
+    "@astrojs/starlight-tailwind": "^5.0.0",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.2.10",
+    "marked": "^18.0.14",
+    "satori": "^0.33.4",
+    "sharp": "^0.35.3",
+    "sitemap": "^9.0.1",
+    "tailwindcss": "^4.3.3"
+  },
+  "allowScripts": {
+    "esbuild": true
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "prettier": "^3.9.8",
+    "prettier-plugin-astro": "^1.0.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "typescript": "^6.0.3"
+  },
+  "private": true,
+  "description": "The kubermeister.io website and documentation.",
+  "engines": {
+    "node": ">=24"
+  }
+}
