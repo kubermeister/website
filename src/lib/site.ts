@@ -24,6 +24,7 @@ export type NavLink = { readonly label: string; readonly href: string };
 export const NAV: readonly NavLink[] = [
     { label: 'Features', href: '/#features' },
     { label: 'Docs', href: '/docs/' },
+    { label: 'Compare', href: '/compare/' },
     { label: 'Changelog', href: '/changelog/' },
 ] as const;
 
@@ -44,6 +45,15 @@ export const FOOTER: readonly { readonly title: string; readonly links: readonly
             { label: 'Connect a cluster', href: '/docs/clusters/connecting/' },
             { label: 'Logs', href: '/docs/sessions/logs/' },
             { label: 'Troubleshooting', href: '/docs/reference/troubleshooting/' },
+        ],
+    },
+    {
+        title: 'Compare',
+        links: [
+            { label: 'vs Lens', href: '/compare/lens/' },
+            { label: 'vs OpenLens', href: '/compare/openlens/' },
+            { label: 'vs k9s', href: '/compare/k9s/' },
+            { label: 'vs Headlamp', href: '/compare/headlamp/' },
         ],
     },
     {

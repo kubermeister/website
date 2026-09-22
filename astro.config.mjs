@@ -49,6 +49,7 @@ export default defineConfig({
                 const path = new URL(item.url).pathname;
                 if (path === '/') return { ...item, priority: 1.0, changefreq: EnumChangefreq.WEEKLY };
                 if (path === '/download/') return { ...item, priority: 0.9, changefreq: EnumChangefreq.WEEKLY };
+                if (path.startsWith('/compare/')) return { ...item, priority: 0.8, changefreq: EnumChangefreq.MONTHLY };
                 if (path.startsWith('/docs/')) return { ...item, priority: 0.7, changefreq: EnumChangefreq.MONTHLY };
                 return { ...item, priority: 0.5, changefreq: EnumChangefreq.MONTHLY };
             },

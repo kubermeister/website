@@ -1,3 +1,5 @@
+import { COMPETITORS } from './compare';
+
 /**
  * Title, description and social card for every page outside /docs/. Keeping them here rather than
  * in each page means the social card generator, llms.txt and the page itself can never disagree
@@ -14,6 +16,15 @@ export type PageMeta = {
     readonly cardSubtitle?: string;
     readonly bareTitle?: boolean;
 };
+
+const compare: PageMeta[] = COMPETITORS.map((entry) => ({
+    path: `/compare/${entry.slug}/`,
+    title: entry.title,
+    description: entry.description,
+    eyebrow: 'Compare',
+    cardTitle: entry.title,
+    cardSubtitle: `A desktop Kubernetes client compared with ${entry.name}, ${entry.kind}.`,
+}));
 
 export const PAGES: readonly PageMeta[] = [
     {
@@ -43,6 +54,16 @@ export const PAGES: readonly PageMeta[] = [
         eyebrow: 'Changelog',
         cardTitle: 'What changed, release by release',
     },
+    {
+        path: '/compare/',
+        title: 'Kubermeister compared with Lens, OpenLens, k9s and Headlamp',
+        description:
+            'Honest comparisons between Kubermeister and the other Kubernetes clients people actually use, including when the other tool is the better choice.',
+        eyebrow: 'Compare',
+        cardTitle: 'How Kubermeister compares',
+        cardSubtitle: 'Lens, OpenLens, k9s and Headlamp — including when to pick them instead.',
+    },
+    ...compare,
 ] as const;
 
 export const page = (path: string): PageMeta => {
