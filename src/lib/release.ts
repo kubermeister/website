@@ -12,6 +12,12 @@ export type Release = {
 
 const API = 'https://api.github.com/repos/kubermeister/kubermeister';
 
+/**
+ * Set by the deploy workflow from the release dispatch's payload, and empty on every other build.
+ * Its presence is what tells this module the build exists to publish one specific release.
+ */
+const releaseTag = process.env.KM_RELEASE_TAG?.trim() || null;
+
 const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
     'User-Agent': 'kubermeister-website-build',
@@ -19,14 +25,22 @@ const headers: Record<string, string> = {
 };
 
 /**
- * The build asks GitHub for the current release so the download page and the version badge are
- * right the moment a release lands. A committed snapshot answers instead when the API is
+ * The build asks GitHub for the release the download page, the version badge and the structured
+ * data describe.
+ *
+ * A build the release workflow asked for names the tag it is publishing and asks for that exact
+ * release. Asking for "latest" would put a second source on the same question seconds after the
+ * first: the dispatch fires as soon as the release is public, and a reply that is briefly stale
+ * would ship a site advertising the previous version, successfully and silently.
+ *
+ * Any other build asks for the latest release, and a committed snapshot answers when the API is
  * unreachable or rate-limited, because a site that fails to build is worse than one a release
- * behind — the release workflow rebuilds it anyway.
+ * behind.
  */
 export async function latestRelease(): Promise<Release> {
+    const path = releaseTag ? `/releases/tags/v${releaseTag}` : '/releases/latest';
     try {
-        const response = await fetch(`${API}/releases/latest`, { headers, signal: AbortSignal.timeout(15_000) });
+        const response = await fetch(`${API}${path}`, { headers, signal: AbortSignal.timeout(15_000) });
         if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
         const body = (await response.json()) as {
             tag_name: string;
@@ -41,6 +55,12 @@ export async function latestRelease(): Promise<Release> {
             assets: body.assets.map((asset) => asset.name),
         };
     } catch (error) {
+        // The fallback is for a build that had nothing to do with a release. One the release itself
+        // asked for has no such excuse: publishing that version is the whole point of the run, so it
+        // fails rather than quietly deploying the version before it.
+        if (releaseTag) {
+            throw new Error(`[release] could not read v${releaseTag}: ${(error as Error).message}`);
+        }
         console.warn(`[release] falling back to src/data/release.json: ${(error as Error).message}`);
         return fallback as Release;
     }
