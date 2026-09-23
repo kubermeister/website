@@ -2,6 +2,9 @@
 dist/
 # generated types
 .astro/
+# the docs and their screenshots, fetched from the app repository's release by scripts/fetch-docs.mjs
+src/content/docs/
+src/assets/screenshots/
 
 # dependencies
 node_modules/

@@ -3,14 +3,17 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "docs": "node scripts/fetch-docs.mjs",
+    "predev": "npm run docs",
     "dev": "astro dev",
+    "prebuild": "npm run docs",
     "build": "astro build",
     "preview": "astro preview",
+    "precheck": "npm run docs",
     "check": "astro check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "astro": "astro",
-    "screenshots:sync": "node scripts/sync-screenshots.mjs"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

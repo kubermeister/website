@@ -3,3 +3,6 @@ dist
 node_modules
 package-lock.json
 src/assets/fonts
+# Fetched from the app repository, which formats them itself.
+src/content/docs
+src/assets/screenshots

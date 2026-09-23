@@ -19,6 +19,14 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Both steps fetch the docs, so both need the release pin: a check against one release and a
+    # build of another would verify pages that are not the ones published.
+    env:
+      # Lifts the anonymous rate limit on the release and changelog reads the build makes.
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Set only on a release dispatch, and it pins the build, its docs included, to that exact
+      # release rather than to whatever the API calls latest a moment later. Empty on a push to main.
+      KM_RELEASE_TAG: ${{ github.event.client_payload.version }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -31,12 +39,6 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
-        env:
-          # Lifts the anonymous rate limit on the release and changelog reads the build makes.
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Set only on a release dispatch, and it pins the build to that exact release rather than
-          # to whatever the API calls latest a moment later. Empty on a push to main.
-          KM_RELEASE_TAG: ${{ github.event.client_payload.version }}
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist
