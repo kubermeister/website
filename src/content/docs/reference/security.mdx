@@ -1,6 +1,6 @@
 ---
 title: Security
-description: What Kubermeister can reach, what it never does, how Secrets are handled, and how the desktop build is hardened and signed.
+description: What Kubermeister can reach, what it never does, how Secrets and stored credentials are handled, and how the desktop build is hardened, signed and checksummed.
 sidebar:
   order: 2
 ---
@@ -9,10 +9,16 @@ import Figure from '@/components/docs/Figure.astro';
 
 ## What it talks to
 
-Your Kubernetes API server, and GitHub for update checks. That is the list.
+- **Your Kubernetes API servers**, through the proxy that applies to each one — see
+  [proxies and certificates](/docs/clusters/proxies-and-certificates/).
+- **GitHub**, for the update feed and the update downloads from the app's own releases.
+- **The chart repositories and OCI registries you add** in **Settings › Charts**, when you add or
+  refresh one. With none added, there are none to reach.
 
-There is no backend, no account, no telemetry service and no analytics. Nothing about your clusters
-leaves your machine.
+That is the list. Links such as **Report a bug**, **What's new** or **Help › Kubermeister on
+GitHub** open in your own browser, not in the app.
+
+There is no backend, no account, no telemetry service and no analytics.
 
 ## What it uses to get in
 
@@ -44,39 +50,54 @@ A Secret's values never cross into the interface as a map:
 
 - The entries call returns **key names with a fixed mask**.
 - A reveal or a copy asks for the **single key** it needs.
-- A revealed value is held on its own, never in the query cache. It **re-masks itself on a timer**
-  and goes when you leave the page.
+- A revealed value is held on its own, never in the query cache. It **re-masks itself after 30
+  seconds** and goes when you leave the page.
 - A **copy never renders the value at all** — it goes to the clipboard without appearing on screen.
 
-The Manifest tab is the exception, and shows the object as the cluster holds it, because that is what
-editing it requires.
+The Manifest tab is the exception: it shows the Secret's `data` as the API returns it, base64-encoded,
+because editing the object requires it.
 
 ## Renderer hardening
 
 The window is hardened and that is never relaxed:
 
 - `sandbox` on, `contextIsolation` on, `nodeIntegration` off.
+- A Content-Security-Policy that loads scripts only from the app itself:
+  `default-src 'self'; script-src 'self'`, with no inline scripts.
 - Window-open and navigation handlers route only `http:` and `https:` URLs to your OS browser and
   **deny everything else**.
 - The preload bridge imports exactly one file, which imports nothing, because a sandboxed preload
-  cannot require anything but Electron built-ins.
-- Every IPC channel is declared with schemas and validated **in both directions**.
+  cannot require anything but Electron built-ins. A build-time check fails the build if the preload
+  bundle ever requires anything else.
+- Every request channel is declared with schemas, and its input and output are validated; so are the
+  pushes from the main process and the messages that start, feed and stop a stream.
 - A file only enters the app through the OS — a native dialog, or a real drag-and-drop. A path the
-  interface named would be a file it chose to have read.
+  interface named would be a file it chose to have read. The same holds for the kubeconfig and the
+  CA bundle, which the interface can never set by path.
 
-A build-time check fails the build if anything else ever appears in the preload bundle.
+## Credentials the app stores
+
+Only one kind: the username and password of a chart repository, if you give one. It is sealed with
+the OS secret store — Keychain on macOS, libsecret on Linux, DPAPI on Windows — and written as
+ciphertext to `chart-credentials.json` in the app's user-data directory, readable by your user only.
+A system with no secret store is refused the password rather than having it written in the clear.
+Kubernetes credentials stay in your kubeconfig and your credential plugins.
 
 ## Build hardening
 
 Electron fuses are flipped in the binary at package time and read before any JavaScript runs:
 
-- `runAsNode`, `NODE_OPTIONS` and the inspect arguments are **off**, so the signed app cannot be
-  started as a plain Node binary or have a script preloaded into it;
-- `onlyLoadAppFromAsar` and the embedded ASAR integrity check are **on**.
+- `runAsNode`, `NODE_OPTIONS` and the inspect arguments are **off**, so the app cannot be started as
+  a plain Node binary or have a script preloaded into it;
+- `onlyLoadAppFromAsar` and the embedded ASAR integrity check are **on**, and cookie encryption is
+  on.
 
-macOS builds are Developer ID signed and notarized.
+## Signing and checksums
 
-## Releases
+The macOS build is Developer ID signed and notarised. **The Windows and Linux installers are
+unsigned**, so the checksum is how you check them: every release carries a `SHA256SUMS` file, and the
+release is made public only after it is attached. See
+[verifying a download](/docs/start/install/#verifying-a-download).
 
 Installers carry their version in the file name, so a new build never overwrites the files a live
 update feed points at. Each asset is uploaded on its own and read back to verify its size and

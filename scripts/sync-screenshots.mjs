@@ -27,13 +27,18 @@ const TARGET = join(HERE, 'src', 'assets', 'screenshots');
 
 /** The shots the site renders. Adding one here is the only step needed to use it in a page. */
 const WANTED = [
+    'autoscaler-bounds',
     'command-palette',
     'crd-instances',
+    'create-resource',
+    'cronjob-detail',
     'deployment-compare',
+    'deployments-scale',
     'describe',
     'events',
     'helm-release',
     'manifest-editor',
+    'manifest-review',
     'namespace-detail',
     'node-detail',
     'node-drain-plan',
@@ -44,7 +49,9 @@ const WANTED = [
     'pods-list',
     'port-forwards',
     'secret-reveal',
+    'selection-export',
     'settings',
+    'settings-connection',
     'summary',
     'workload-logs',
 ];

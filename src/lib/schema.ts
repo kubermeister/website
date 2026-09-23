@@ -38,7 +38,7 @@ export const softwareApplication = (version: string, datePublished: string): Nod
     description: SITE.description,
     applicationCategory: 'DeveloperApplication',
     applicationSubCategory: 'Kubernetes client',
-    operatingSystem: 'macOS 11+, Windows 10+, Linux',
+    operatingSystem: 'macOS 13+, Windows 10+, Linux',
     softwareVersion: version,
     datePublished,
     downloadUrl: absolute('/download/'),

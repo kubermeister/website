@@ -73,6 +73,31 @@ Scopes here are `repo`, `content`, `docs`, `design`, `seo`, `build`, `ci`, `deps
   `electron-builder.yml`, and electron-builder renders `${arch}` differently per Linux target
   (`amd64` for the `.deb`, `x86_64` for the AppImage). The two change together.
 
+### Keeping the docs in step with the app
+
+The docs describe the app as of one release, recorded in **`src/data/docs-version.json`**. Nothing
+updates them automatically, so when asked to **update the website** (or the docs), bring them up
+to the newest published release:
+
+1. Read `docs-version.json`, then list the app's releases after that version
+   (`gh release list -R kubermeister/kubermeister`). None newer means there is nothing to do.
+2. Take them oldest first. For each, read its section of the app's `CHANGELOG.md` **and** the code
+   diff between the two tags in a local checkout of the app (`git diff vA..vB -- src`). The
+   changelog says what changed; the diff is what the app actually does, and a doc sentence is
+   written from the diff. Controls are named by their exact label in the code.
+3. Update every page the change touches — often more than one, since a setting or a menu is named
+   on several — and add a page when a feature has none. A behaviour a filed bug gets wrong is
+   described as it is, with a `:::caution[Known issue]` aside linking the issue; remove the aside
+   once the fix has shipped.
+4. When a page needs a screenshot that does not exist, add the shot to the harness in the app
+   repository first (its own PR there), regenerate the set, then add the name to `WANTED` and run
+   `npm run screenshots:sync` here. When the UI of an existing shot changed, re-sync it.
+5. Check the marketing pages, `src/lib/pages.ts` and `src/lib/site.ts` against the same diff; they
+   make claims about the app too.
+6. Set `docs-version.json` to the newest release covered, refresh `src/data/release.json` from the
+   GitHub API, run `npm run check` and `npm run format`, and open **one** PR whose body has a
+   paragraph per release saying what changed in the docs.
+
 ### Design
 
 - The palette, fonts and radius are the app's own (`src/renderer/styles/globals.css` there), so a

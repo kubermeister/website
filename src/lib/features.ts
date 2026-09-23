@@ -24,13 +24,13 @@ export type IconName =
 export const FEATURES: readonly Feature[] = [
     {
         title: 'Lists that are already live',
-        body: 'Screens watch the API server instead of polling it. One informer serves every screen on the same kind, and rows are virtualised, so a list costs the size of your window rather than the size of your cluster.',
+        body: 'Most screens watch the API server instead of polling it. One informer serves every screen on the same kind, and rows are virtualised, so a list costs the size of your window rather than the size of your cluster.',
         href: '/docs/browse/lists/',
         icon: 'activity',
     },
     {
         title: 'Logs that open following',
-        body: 'A Logs tab starts live, because a log is opened to see what is happening now. Narrow by regex or highlight in place, pick a container and a time window, and download the whole log from the API server rather than the buffer on screen.',
+        body: 'A Logs tab starts live, because a log is opened to see what is happening now. Narrow by regex or highlight in place, pick a container and a time window, and download a pod’s log for that window from the API server rather than the buffer on screen.',
         href: '/docs/sessions/logs/',
         icon: 'scroll',
     },
@@ -66,31 +66,31 @@ export const FEATURES: readonly Feature[] = [
     },
     {
         title: 'Usage without a stack to run',
-        body: 'Charts for the cluster, each node, each workload and each pod, sampled from metrics-server while the app is open. No metrics-server means zero usage, never an error page.',
+        body: 'Charts for the cluster, each node, each Deployment and each pod, sampled from metrics-server while the app is open. No metrics-server means empty charts, never an error page.',
         href: '/docs/operations/metrics/',
         icon: 'chart',
     },
     {
         title: 'Alerts derived from the cluster',
-        body: 'Pending and failed pods, crash loops and image pull failures, found through field selectors and the kubelet’s own events — never by reading every pod in the cluster.',
+        body: 'Pending and failed pods, crash loops, image pull failures, failed Jobs and stuck claims, found through field selectors and the kubelet’s own events — never by reading every pod in the cluster.',
         href: '/docs/operations/alerts/',
         icon: 'bell',
     },
     {
         title: 'Your CRDs, with their own columns',
-        body: 'Custom resources list with the additionalPrinterColumns their definition declares — the same columns kubectl get would print — and edit through the same path as any built-in kind.',
+        body: 'Custom resources list with the additionalPrinterColumns their definition declares — the columns kubectl get -o wide would print — and edit through the same path as any built-in kind.',
         href: '/docs/browse/custom-resources/',
         icon: 'search',
     },
     {
         title: 'Manifests, describe and exports',
-        body: 'Read any object as YAML, describe pods and nodes as a structured document you can copy, and save a whole list selection as one file with the fields the server owns stripped out so it applies elsewhere.',
+        body: 'Read any object as YAML, describe pods and nodes as a structured document you can copy, and save a whole list selection as one file, as the cluster holds it or with the fields the server owns stripped out so it applies elsewhere.',
         href: '/docs/browse/manifests/',
         icon: 'file',
     },
     {
         title: 'Writes that fail closed',
-        body: 'Every write carries the context the screen was rendered under and is refused if the app has switched since. Deleting a node or a CRD asks you to type its name. Nothing destructive is one click away.',
+        body: 'Every write carries the context the screen was rendered under and is refused if the app has switched since. Deleting a node or a CRD asks you to type its name, and every delete asks before it goes.',
         href: '/docs/workloads/writing/',
         icon: 'shield',
     },

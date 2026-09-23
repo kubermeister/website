@@ -8,7 +8,7 @@ export const SITE = {
     /** The one-line answer to "what is this", reused as the default meta description. */
     tagline: 'A fast, native desktop client for Kubernetes',
     description:
-        'Kubermeister is a fast desktop Kubernetes client for macOS, Windows and Linux. Browse live clusters, follow logs, exec into pods, forward ports, manage Helm releases and drain nodes — without kubectl.',
+        'Kubermeister is a fast desktop Kubernetes client for macOS, Windows and Linux. Browse live clusters, follow logs, exec into pods, forward ports, roll back Helm releases and drain nodes — without kubectl.',
     repo: 'https://github.com/kubermeister/kubermeister',
     siteRepo: 'https://github.com/kubermeister/website',
     tap: 'https://github.com/kubermeister/homebrew-tap',

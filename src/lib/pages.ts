@@ -20,7 +20,7 @@ export const PAGES: readonly PageMeta[] = [
         path: '/',
         title: 'Kubermeister — a fast desktop Kubernetes client',
         description:
-            'A fast, native desktop client for Kubernetes. Browse live clusters, follow logs, exec into pods, forward ports, manage Helm releases and drain nodes on macOS, Windows and Linux. Free and open source, no account required.',
+            'A fast, native desktop client for Kubernetes. Browse live clusters, follow logs, exec into pods, forward ports, roll back Helm releases and drain nodes on macOS, Windows and Linux. Free and open source, no account required.',
         eyebrow: 'Kubernetes desktop client',
         cardTitle: 'A fast desktop client for Kubernetes',
         cardSubtitle: 'Live clusters, logs, shells, port forwards and Helm. Free and open source.',
@@ -30,10 +30,10 @@ export const PAGES: readonly PageMeta[] = [
         path: '/download/',
         title: 'Download Kubermeister for macOS, Windows and Linux',
         description:
-            'Download the latest Kubermeister release. Signed and notarized builds for macOS (Apple silicon and Intel), Windows and Linux, plus a Homebrew cask.',
+            'Download the latest Kubermeister release for macOS (Apple silicon and Intel, signed and notarised), Windows and Linux, plus a Homebrew cask.',
         eyebrow: 'Download',
         cardTitle: 'Download Kubermeister',
-        cardSubtitle: 'Signed builds for macOS, Windows and Linux. Free and open source.',
+        cardSubtitle: 'Builds for macOS, Windows and Linux. Free and open source.',
     },
     {
         path: '/changelog/',
