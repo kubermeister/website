@@ -1,8 +1,8 @@
 # kubermeister.dev
 
-The marketing site and documentation for Kubermeister. The application itself lives in
-[`kubermeister/kubermeister`](https://github.com/kubermeister/kubermeister); this repository
-contains no application code.
+The marketing site for Kubermeister, and the site its documentation is published on. The
+application lives in [`kubermeister/kubermeister`](https://github.com/kubermeister/kubermeister),
+and so do the documentation pages and their screenshots; this repository contains neither.
 
 `CLAUDE.md` only imports this file, so edits go here.
 
@@ -36,8 +36,8 @@ Scopes here are `repo`, `content`, `docs`, `design`, `seo`, `build`, `ci`, `deps
 ### Routing
 
 - **Marketing pages own the root**; Starlight owns `/docs/`. The prefix comes from `generateId` in
-  `src/content.config.ts`, so files stay at `src/content/docs/<section>/<page>.md` and only the
-  route gains it. The sidebar's `autogenerate` directories in `astro.config.mjs` are **unprefixed**
+  `src/content.config.ts`, so the fetched files sit at `src/content/docs/<section>/<page>.md` and
+  only the route gains it. The sidebar's `autogenerate` directories in `astro.config.mjs` are **unprefixed**
   (`start`, not `docs/start`): Starlight matches them against the file path under
   `src/content/docs/`, not the entry id, so a prefixed one matches nothing and its group is empty.
 - `trailingSlash: 'always'`. GitHub Pages serves directory indexes and has no redirect rules, so
@@ -73,30 +73,34 @@ Scopes here are `repo`, `content`, `docs`, `design`, `seo`, `build`, `ci`, `deps
   `electron-builder.yml`, and electron-builder renders `${arch}` differently per Linux target
   (`amd64` for the `.deb`, `x86_64` for the AppImage). The two change together.
 
-### Keeping the docs in step with the app
+### The documentation comes from the app
 
-The docs describe the app as of one release, recorded in **`src/data/docs-version.json`**. Nothing
-updates them automatically, so when asked to **update the website** (or the docs), bring them up
-to the newest published release:
+- **The pages and their screenshots live in the app repository's `docs/`**, where the pull request
+  that changes a screen also changes the page about it. Never add or edit a doc page here.
+- `scripts/fetch-docs.mjs` runs before `dev`, `check` and `build`. It reads the app's source
+  archive **at the release tag** the build describes — `KM_RELEASE_TAG` on a release dispatch, the
+  latest release otherwise — and writes the pages to `src/content/docs/` and the screenshots to
+  `src/assets/screenshots/`, both ignored by git. The site therefore documents exactly the version
+  people can download, and a page written on the app's `main` is published with its release.
+- **There is no fallback.** A build that cannot read the docs fails, and GitHub Pages keeps serving
+  the last good deploy; a committed copy would be the duplicate the move removed.
+- Each fetched page is given an `editUrl` to its source on the app's `main`, because Starlight
+  would otherwise build the edit link from the generated copy's path here. Git history here knows
+  nothing of the pages, so `lastUpdated` is off.
+- `KM_DOCS_DIR=../kubermeister/docs npm run dev` previews an app checkout's pages before they are
+  released. CI never sets it.
+- What a page may use is defined in the app's `AGENTS.md`; the components it names (`Figure`,
+  Starlight's own) are this repository's to keep working. A new docs section needs its sidebar
+  group in `astro.config.mjs`.
 
-1. Read `docs-version.json`, then list the app's releases after that version
-   (`gh release list -R kubermeister/kubermeister`). None newer means there is nothing to do.
-2. Take them oldest first. For each, read its section of the app's `CHANGELOG.md` **and** the code
-   diff between the two tags in a local checkout of the app (`git diff vA..vB -- src`). The
-   changelog says what changed; the diff is what the app actually does, and a doc sentence is
-   written from the diff. Controls are named by their exact label in the code.
-3. Update every page the change touches — often more than one, since a setting or a menu is named
-   on several — and add a page when a feature has none. A behaviour a filed bug gets wrong is
-   described as it is, with a `:::caution[Known issue]` aside linking the issue; remove the aside
-   once the fix has shipped.
-4. When a page needs a screenshot that does not exist, add the shot to the harness in the app
-   repository first (its own PR there), regenerate the set, then add the name to `WANTED` and run
-   `npm run screenshots:sync` here. When the UI of an existing shot changed, re-sync it.
-5. Check the marketing pages, `src/lib/pages.ts` and `src/lib/site.ts` against the same diff; they
-   make claims about the app too.
-6. Set `docs-version.json` to the newest release covered, refresh `src/data/release.json` from the
-   GitHub API, run `npm run check` and `npm run format`, and open **one** PR whose body has a
-   paragraph per release saying what changed in the docs.
+### Checking the marketing pages against a release
+
+The marketing pages, `src/lib/pages.ts`, `src/lib/site.ts` and `src/lib/features.ts` make claims
+about the app too, and nothing ties them to its code. When asked to **update the website**, read
+the `CHANGELOG.md` section and the code diff (`git diff vA..vB -- src` in an app checkout) of every
+release since the last one checked, correct whatever those files say that is no longer true, and
+refresh `src/data/release.json` from the GitHub API. The docs need nothing: each release brings its
+own.
 
 ### Design
 
@@ -111,15 +115,8 @@ to the newest published release:
 
 ### Screenshots
 
-- **The harness lives in the application repository**, not here: `npm run build && npm run
-screenshots` there drives the built app against its own demo cluster and writes
-  `docs/screenshots/<theme>/<shot>.png` in both themes. That repository generates its set and
-  commits none of it (kubermeister/kubermeister#315); this one commits the handful it renders,
-  because the site has to build in CI with no Docker and no app checkout.
-- `npm run screenshots:sync` copies the shots in `WANTED` out of that checkout. A shot the harness
-  no longer produces fails the sync rather than leaving a page pointing at a stale image.
-- **Never add a second harness here.** Two would drift, and the one over there already has the demo
-  seed, the deliberately broken workloads the alerts panel needs, and both themes.
+- **The screenshots come with the docs**, from the app's `docs/screenshots/<theme>/<shot>.webp`,
+  shot by the harness there. **Never add a second harness here.**
 - `src/components/Shot.astro` renders the pair and lets CSS pick, so a light page shows the light
   screenshot. A lazy image inside a hidden element is not fetched until it is shown, so only the
   hero pays for the pair it cannot defer.

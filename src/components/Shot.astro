@@ -23,7 +23,7 @@ const files = import.meta.glob<{ default: ImageMetadata }>('../assets/screenshot
 
 const source = (theme: 'dark' | 'light') => {
     const found = files[`../assets/screenshots/${theme}/${name}.webp`];
-    if (!found) throw new Error(`no ${theme} screenshot named "${name}" — run npm run screenshots:sync`);
+    if (!found) throw new Error(`no ${theme} screenshot named "${name}" — the app's docs/screenshots has no such shot`);
     return found.default;
 };
 

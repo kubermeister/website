@@ -24,8 +24,10 @@ export default defineConfig({
             favicon: '/favicon.svg',
             logo: { src: './src/assets/logo.svg', alt: 'Kubermeister' },
             social: [{ icon: 'github', label: 'GitHub', href: SITE.repo }],
-            editLink: { baseUrl: `${SITE.siteRepo}/edit/main/` },
-            lastUpdated: true,
+            // The pages are fetched from the app repository at build time (scripts/fetch-docs.mjs),
+            // which writes each one's edit link to its source there. Git history here knows nothing
+            // of them, so it cannot date them either.
+            lastUpdated: false,
             pagination: true,
             customCss: ['./src/styles/global.css', './src/styles/docs.css'],
             components: {

@@ -1,7 +1,9 @@
 # kubermeister.dev
 
-The Kubermeister website and documentation. Astro with Starlight for the docs, Tailwind 4 for the
-marketing pages, deployed to GitHub Pages at [kubermeister.dev](https://kubermeister.dev).
+The Kubermeister website. Astro with Starlight for the docs, Tailwind 4 for the marketing pages,
+deployed to GitHub Pages at [kubermeister.dev](https://kubermeister.dev). The documentation itself
+is written in the [app repository](https://github.com/kubermeister/kubermeister/tree/main/docs) and
+fetched from its latest release at build time.
 
 ```sh
 npm install
@@ -19,24 +21,23 @@ Node 24 or newer.
 | Path                     | What it holds                                                       |
 | ------------------------ | ------------------------------------------------------------------- |
 | `src/pages`              | The marketing pages: home, download, changelog, comparisons, 404.   |
-| `src/content/docs`       | The documentation. Files map to `/docs/<path>/`.                    |
+| `src/content/docs`       | Fetched docs, not committed. Files map to `/docs/<path>/`.          |
 | `src/lib`                | Site constants, page metadata, comparison content, structured data. |
 | `src/components`         | Shared components; `components/docs` overrides Starlight's.         |
-| `src/assets/screenshots` | Synced from the app repo's harness, one directory per theme.        |
-| `scripts`                | The screenshot capture and the IndexNow submitter.                  |
+| `src/assets/screenshots` | Fetched with the docs, not committed, one directory per theme.      |
+| `scripts`                | The docs fetch and the IndexNow submitter.                          |
 
-## Screenshots
+## Docs and screenshots
 
-Every screenshot is the real application. The harness lives in the app repository, which owns the
-demo cluster and the shot list and photographs every screen in both themes:
+`npm run dev`, `check` and `build` first run `scripts/fetch-docs.mjs`, which puts the app's `docs/`
+from its latest release (or the release a dispatch names) in place, pages and screenshots together.
+To preview pages that are not released yet, point it at an app checkout:
 
 ```sh
-cd ../kubermeister && npm run build && npm run screenshots
-cd ../website && npm run screenshots:sync
+KM_DOCS_DIR=../kubermeister/docs npm run dev
 ```
 
-The sync copies only the shots this site renders, listed in `scripts/sync-screenshots.mjs`.
-`KM_APP_REPO` points at the app checkout if it is not at `../kubermeister`.
+Pages and screenshots are changed in the app repository, never here.
 
 ## Deploying
 
