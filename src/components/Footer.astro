@@ -39,11 +39,19 @@ const year = new Date().getFullYear();
     <div class="border-t border-line">
         <div class="container-page flex flex-wrap items-center justify-between gap-4 py-6 text-sm text-dim">
             <p>
-                © {year} {SITE.org}
+                © {year} {SITE.copyrightHolder} · Released under the{' '}
+                <a
+                    href={SITE.license.href}
+                    {...EXTERNAL}
+                    class="underline underline-offset-2 transition-colors hover:text-fg"
+                >
+                    {SITE.license.name}
+                </a>
             </p>
             <p>
-                Kubernetes is a registered trademark of The Linux Foundation. Kubermeister is not affiliated with or
-                endorsed by it.
+                Kubernetes and Helm are trademarks of The Linux Foundation. Kubermeister is an independent project, not
+                affiliated with or endorsed by The Linux Foundation or the CNCF. Other names are trademarks of their
+                respective owners.
             </p>
         </div>
     </div>
