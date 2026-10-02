@@ -15,6 +15,9 @@ export const SITE = {
     discussions: 'https://github.com/kubermeister/kubermeister/discussions',
     issues: 'https://github.com/kubermeister/kubermeister/issues',
     org: 'Kubermeister',
+    /** The copyright holder named in the app's LICENSE; the footer and the licence must agree. */
+    copyrightHolder: 'Ararat Poghosyan',
+    license: { name: 'MIT License', href: 'https://github.com/kubermeister/kubermeister/blob/main/LICENSE' },
     /** The X handle, credited in twitter:site on link previews. */
     social: '@kubermeister',
     x: 'https://x.com/kubermeister',
