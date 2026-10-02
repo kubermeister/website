@@ -6,18 +6,25 @@ export const SITE = {
     origin: 'https://kubermeister.dev',
     name: 'Kubermeister',
     /** The one-line answer to "what is this", reused as the default meta description. */
-    tagline: 'A fast, native desktop client for Kubernetes',
+    tagline: 'A thoughtful desktop client for Kubernetes',
     description:
-        'Kubermeister is a fast desktop Kubernetes client for macOS, Windows and Linux. Browse live clusters, follow logs, exec into pods, forward ports, roll back Helm releases and drain nodes — without kubectl.',
+        'Kubermeister is a desktop Kubernetes client for macOS, Windows and Linux. Browse live clusters, follow logs, exec into pods, forward ports, roll back Helm releases and drain nodes — without kubectl.',
     repo: 'https://github.com/kubermeister/kubermeister',
     siteRepo: 'https://github.com/kubermeister/website',
     tap: 'https://github.com/kubermeister/homebrew-tap',
     discussions: 'https://github.com/kubermeister/kubermeister/discussions',
     issues: 'https://github.com/kubermeister/kubermeister/issues',
     org: 'Kubermeister',
-    /** Twitter/X handle, or null while there is no account — the meta tag is omitted rather than faked. */
-    social: null as string | null,
+    /** The X handle, credited in twitter:site on link previews. */
+    social: '@kubermeister',
+    x: 'https://x.com/kubermeister',
 } as const;
+
+/** The docs header's profile links, as Starlight's `social` option and docs/SocialIcons.astro read them. */
+export const SOCIAL = [
+    { icon: 'github', label: 'GitHub', href: SITE.repo },
+    { icon: 'x.com', label: 'X', href: SITE.x },
+] as const;
 
 export type NavLink = { readonly label: string; readonly href: string };
 
@@ -51,6 +58,7 @@ export const FOOTER: readonly { readonly title: string; readonly links: readonly
         title: 'Project',
         links: [
             { label: 'GitHub', href: SITE.repo },
+            { label: 'X', href: SITE.x },
             { label: 'Discussions', href: SITE.discussions },
             { label: 'Report an issue', href: SITE.issues },
             { label: 'Releases', href: `${SITE.repo}/releases` },

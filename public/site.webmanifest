@@ -1,7 +1,7 @@
 {
     "name": "Kubermeister",
     "short_name": "Kubermeister",
-    "description": "A fast, native desktop client for Kubernetes.",
+    "description": "A thoughtful desktop client for Kubernetes.",
     "start_url": "/",
     "display": "browser",
     "background_color": "#0b0d10",
