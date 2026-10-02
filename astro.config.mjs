@@ -5,7 +5,9 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { EnumChangefreq } from 'sitemap';
 
-import { SITE } from './src/lib/site.ts';
+import { SITE, SOCIAL } from './src/lib/site.ts';
+import { satteri } from '@astrojs/markdown-satteri';
+import { externalLinksPlugin } from './src/lib/links.ts';
 
 export default defineConfig({
     site: SITE.origin,
@@ -15,6 +17,7 @@ export default defineConfig({
     prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
     build: { format: 'directory' },
     image: { responsiveStyles: true },
+    markdown: { processor: satteri({ hastPlugins: [externalLinksPlugin] }) },
     vite: { plugins: [tailwindcss()] },
     integrations: [
         starlight({
@@ -25,10 +28,7 @@ export default defineConfig({
             disable404Route: true,
             favicon: '/favicon.svg',
             logo: { src: './src/assets/logo.svg', alt: 'Kubermeister' },
-            social: [
-                { icon: 'github', label: 'GitHub', href: SITE.repo },
-                { icon: 'x.com', label: 'X', href: SITE.x },
-            ],
+            social: [...SOCIAL],
             // The pages are fetched from the app repository at build time (scripts/fetch-docs.mjs),
             // which writes each one's edit link to its source there. Git history here knows nothing
             // of them, so it cannot date them either.
@@ -38,6 +38,10 @@ export default defineConfig({
             components: {
                 SiteTitle: './src/components/docs/SiteTitle.astro',
                 Head: './src/components/docs/Head.astro',
+                // Starlight's own links to GitHub and X, given the same new-tab rule as every other
+                // external link on the site.
+                SocialIcons: './src/components/docs/SocialIcons.astro',
+                EditLink: './src/components/docs/EditLink.astro',
             },
             expressiveCode: { themes: ['github-dark-default', 'github-light'] },
             sidebar: [

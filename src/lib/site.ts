@@ -20,6 +20,12 @@ export const SITE = {
     x: 'https://x.com/kubermeister',
 } as const;
 
+/** The docs header's profile links, as Starlight's `social` option and docs/SocialIcons.astro read them. */
+export const SOCIAL = [
+    { icon: 'github', label: 'GitHub', href: SITE.repo },
+    { icon: 'x.com', label: 'X', href: SITE.x },
+] as const;
+
 export type NavLink = { readonly label: string; readonly href: string };
 
 export const NAV: readonly NavLink[] = [

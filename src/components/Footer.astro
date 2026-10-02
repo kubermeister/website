@@ -1,5 +1,6 @@
 ---
 import { FOOTER, SITE } from '../lib/site';
+import { EXTERNAL, isExternal } from '../lib/links';
 import Logo from './Logo.astro';
 
 const year = new Date().getFullYear();
@@ -23,7 +24,7 @@ const year = new Date().getFullYear();
                         <li>
                             <a
                                 href={link.href}
-                                rel={link.href.startsWith('http') ? 'noopener' : undefined}
+                                {...(isExternal(link.href) ? EXTERNAL : {})}
                                 class="text-sm text-muted transition-colors hover:text-fg"
                             >
                                 {link.label}

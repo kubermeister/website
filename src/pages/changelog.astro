@@ -5,13 +5,22 @@ import { changelog, releaseNotesUrl } from '../lib/release';
 import { page } from '../lib/pages';
 import { breadcrumbs } from '../lib/schema';
 import { SITE } from '../lib/site';
+import { isExternal } from '../lib/links';
 
 const meta = page('/changelog/');
 const entries = await changelog();
 
 // The source is the app repository's own CHANGELOG.md, written by hand, so the markdown is trusted
 // and rendered as-is.
-const rendered = await Promise.all(entries.map(async (entry) => ({ ...entry, html: await marked.parse(entry.body) })));
+const renderer = new marked.Renderer();
+const renderLink = renderer.link.bind(renderer);
+renderer.link = (token) => {
+    const html = renderLink(token);
+    return isExternal(token.href) ? html.replace('<a ', '<a target="_blank" rel="noopener" ') : html;
+};
+const rendered = await Promise.all(
+    entries.map(async (entry) => ({ ...entry, html: await marked.parse(entry.body, { renderer }) })),
+);
 
 const formatDate = (date: string | null) =>
     date
@@ -36,7 +45,7 @@ const formatDate = (date: string | null) =>
             <p class="mx-auto mt-5 max-w-2xl text-lead text-pretty text-muted">
                 What the app now does, and what stopped going wrong — written for somebody deciding whether to update.
                 The full commit-by-commit history is on{' '}
-                <a href={`${SITE.repo}/releases`} rel="noopener" class="text-accent hover:underline">
+                <a href={`${SITE.repo}/releases`} target="_blank" rel="noopener" class="text-accent hover:underline">
                     the releases page
                 </a>
                 .
@@ -48,7 +57,12 @@ const formatDate = (date: string | null) =>
         {rendered.length === 0 && (
             <p class="text-muted">
                 The changelog could not be read at build time.{' '}
-                <a href={`${SITE.repo}/blob/main/CHANGELOG.md`} rel="noopener" class="text-accent hover:underline">
+                <a
+                    href={`${SITE.repo}/blob/main/CHANGELOG.md`}
+                    target="_blank"
+                    rel="noopener"
+                    class="text-accent hover:underline"
+                >
                     Read it on GitHub
                 </a>
                 .
@@ -66,6 +80,7 @@ const formatDate = (date: string | null) =>
                         {entry.version !== 'Unreleased' && (
                             <a
                                 href={releaseNotesUrl(entry.version)}
+                                target="_blank"
                                 rel="noopener"
                                 class="mt-2 inline-block text-sm text-accent hover:underline"
                             >

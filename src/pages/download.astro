@@ -72,7 +72,7 @@ const published_at = new Date(release.publishedAt).toLocaleDateString('en-GB', {
                 no seat count.
             </p>
             <p class="mt-4 text-sm text-dim">
-                <a href={release.htmlUrl} rel="noopener" class="text-accent hover:underline">
+                <a href={release.htmlUrl} target="_blank" rel="noopener" class="text-accent hover:underline">
                     Release notes on GitHub
                 </a>
                 ·{' '}
@@ -134,7 +134,7 @@ const published_at = new Date(release.publishedAt).toLocaleDateString('en-GB', {
 
         <p class="mt-8 text-sm text-muted">
             Looking for an older version, the SHA256SUMS checksums or the update feed? Everything is on the
-            <a href={`${SITE.repo}/releases`} rel="noopener" class="text-accent hover:underline">
+            <a href={`${SITE.repo}/releases`} target="_blank" rel="noopener" class="text-accent hover:underline">
                 releases page
             </a>
             .

@@ -113,6 +113,15 @@ own.
 - `src/styles/docs.css` overrides Starlight's custom properties and nothing else, so its upgrades
   keep working.
 
+### External links
+
+- **A link that leaves kubermeister.dev opens in a new tab** (`target="_blank" rel="noopener"`);
+  installer downloads do not, since a file link never navigates. `src/lib/links.ts` holds the rule:
+  components write the attributes (spreading `EXTERNAL` where the href varies), Markdown and MDX
+  get it from a Sätteri hast plugin configured as `markdown.processor` (Starlight adds its own
+  plugins to that processor), and the changelog from a `marked` renderer. Starlight's
+  `SocialIcons` and `EditLink` are overridden for the same reason.
+
 ### Screenshots
 
 - **The screenshots come with the docs**, from the app's `docs/screenshots/<theme>/<shot>.webp`,
