@@ -18,7 +18,9 @@ export default defineConfig({
     vite: { plugins: [tailwindcss()] },
     integrations: [
         starlight({
-            title: 'Kubermeister Docs',
+            // Also the og:site_name and the title suffix, which should name the same site the
+            // marketing pages do. The header's "Docs" tag comes from SiteTitle.astro.
+            title: SITE.name,
             description: SITE.description,
             disable404Route: true,
             favicon: '/favicon.svg',
