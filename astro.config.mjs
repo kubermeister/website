@@ -25,7 +25,10 @@ export default defineConfig({
             disable404Route: true,
             favicon: '/favicon.svg',
             logo: { src: './src/assets/logo.svg', alt: 'Kubermeister' },
-            social: [{ icon: 'github', label: 'GitHub', href: SITE.repo }],
+            social: [
+                { icon: 'github', label: 'GitHub', href: SITE.repo },
+                { icon: 'x.com', label: 'X', href: SITE.x },
+            ],
             // The pages are fetched from the app repository at build time (scripts/fetch-docs.mjs),
             // which writes each one's edit link to its source there. Git history here knows nothing
             // of them, so it cannot date them either.

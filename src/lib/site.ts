@@ -15,8 +15,9 @@ export const SITE = {
     discussions: 'https://github.com/kubermeister/kubermeister/discussions',
     issues: 'https://github.com/kubermeister/kubermeister/issues',
     org: 'Kubermeister',
-    /** Twitter/X handle, or null while there is no account — the meta tag is omitted rather than faked. */
-    social: null as string | null,
+    /** The X handle, credited in twitter:site on link previews. */
+    social: '@kubermeister',
+    x: 'https://x.com/kubermeister',
 } as const;
 
 export type NavLink = { readonly label: string; readonly href: string };
@@ -51,6 +52,7 @@ export const FOOTER: readonly { readonly title: string; readonly links: readonly
         title: 'Project',
         links: [
             { label: 'GitHub', href: SITE.repo },
+            { label: 'X', href: SITE.x },
             { label: 'Discussions', href: SITE.discussions },
             { label: 'Report an issue', href: SITE.issues },
             { label: 'Releases', href: `${SITE.repo}/releases` },

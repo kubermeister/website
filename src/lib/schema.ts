@@ -17,7 +17,7 @@ export const organization = (): Node => ({
     name: SITE.org,
     url: SITE.origin,
     logo: { '@type': 'ImageObject', url: absolute('/icon-512.png'), width: 512, height: 512 },
-    sameAs: [SITE.repo],
+    sameAs: [SITE.repo, SITE.x],
 });
 
 export const website = (): Node => ({
