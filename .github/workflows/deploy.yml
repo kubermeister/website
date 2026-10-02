@@ -75,3 +75,27 @@ jobs:
         env:
           INDEXNOW_KEY: ${{ vars.INDEXNOW_KEY }}
         run: node scripts/indexnow.mjs
+
+  # A release is worth announcing and a text change to the site is not, so this runs on the app's
+  # release dispatch alone. It waits for the deploy so the post never links to a site a release
+  # behind, and unlike IndexNow it is allowed to fail the run: a missed reminder should be seen.
+  release-post:
+    needs: deploy
+    if: github.event_name == 'repository_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          check-latest: true
+      - name: Open the issue to announce the release on X
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          KM_RELEASE_VERSION: ${{ github.event.client_payload.version }}
+        run: node scripts/release-post.mjs
