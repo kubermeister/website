@@ -20,9 +20,9 @@ export const PAGES: readonly PageMeta[] = [
         path: '/',
         title: 'Kubermeister — a desktop Kubernetes client',
         description:
-            'A native desktop client for Kubernetes. Browse live clusters, follow logs, exec into pods, forward ports, roll back Helm releases and drain nodes on macOS, Windows and Linux. Free and open source, no account required.',
+            'A thoughtful desktop client for Kubernetes. Browse live clusters, follow logs, exec into pods, forward ports, roll back Helm releases and drain nodes on macOS, Windows and Linux. Free and open source, no account required.',
         eyebrow: 'Kubernetes desktop client',
-        cardTitle: 'A desktop client for Kubernetes',
+        cardTitle: 'A thoughtful desktop client for Kubernetes',
         cardSubtitle: 'Live clusters, logs, shells, port forwards and Helm. Free and open source.',
         bareTitle: true,
     },
