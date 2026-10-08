@@ -42,7 +42,7 @@
     "typescript": "^6.0.3"
   },
   "private": true,
-  "description": "The kubermeister.io website and documentation.",
+  "description": "The kubermeister.dev website and documentation.",
   "engines": {
     "node": ">=24"
   }

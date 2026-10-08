@@ -8,6 +8,7 @@ const primary = {
     windows: PLATFORMS.find((p) => p.id === 'win-x64')!,
     linux: PLATFORMS.find((p) => p.id === 'linux-appimage')!,
 };
+const intelMac = PLATFORMS.find((p) => p.id === 'mac-x64')!;
 
 // The server cannot know the visitor's OS, and GitHub Pages has no redirect to decide it, so every
 // platform is a real link in the HTML and a few lines of script promote the one that matches. A
@@ -28,11 +29,18 @@ const primary = {
 
     <a
         href="/download/"
+        data-download-all
         class="inline-flex items-center gap-2 rounded-xl border border-line px-5 py-3.5 text-base text-fg-2 transition-colors hover:border-line-hi hover:text-fg"
     >
         All platforms
     </a>
 </div>
+
+<p class="mt-3 text-sm text-dim" data-download-intel hidden>
+    <a href={downloadUrl(intelMac, release.version)} class="text-accent hover:underline">
+        Intel Mac?
+    </a>
+</p>
 
 <p class="mt-4 text-sm text-dim">
     <span data-download-version>Version {release.version}</span> · Free and open source · No account required
@@ -41,25 +49,64 @@ const primary = {
 <script
     define:vars={{
         links: Object.fromEntries(Object.entries(primary).map(([os, p]) => [os, downloadUrl(p, release.version)])),
+        intelLink: downloadUrl(intelMac, release.version),
     }}
 >
+    // A phone matches "linux" (Android) or "mac" (iPhone), and neither can run a desktop installer.
+    // iPadOS asks for the desktop site and reports itself as an Intel Mac, so touch gives it away.
+    const isMobile = () =>
+        navigator.userAgentData?.mobile === true ||
+        /iphone|ipad|ipod|android/i.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
     const detect = () => {
         const hinted = navigator.userAgentData?.platform ?? '';
         const agent = `${hinted} ${navigator.userAgent}`.toLowerCase();
         if (agent.includes('mac')) return 'macos';
         if (agent.includes('win')) return 'windows';
-        if (agent.includes('linux') || agent.includes('android') || agent.includes('x11')) return 'linux';
+        if (agent.includes('linux') || agent.includes('x11')) return 'linux';
         return null;
     };
 
-    const labels = { macos: 'Download for macOS', windows: 'Download for Windows', linux: 'Download for Linux' };
-    const os = detect();
-    if (os && links[os]) {
-        for (const root of document.querySelectorAll('[data-download-cta]')) {
+    // Only Chromium reports the architecture, and every browser's user agent says "Intel" on Apple
+    // silicon, so a Mac gets the arm64 build unless the hint says otherwise.
+    const architecture = async () => {
+        try {
+            const hints = await navigator.userAgentData?.getHighEntropyValues(['architecture']);
+            return hints?.architecture ?? null;
+        } catch {
+            return null;
+        }
+    };
+
+    const roots = document.querySelectorAll('[data-download-cta]');
+    const promote = (href, text) => {
+        for (const root of roots) {
             const anchor = root.querySelector('[data-download-primary]');
             const label = root.querySelector('[data-download-label]');
-            if (anchor) anchor.href = links[os];
-            if (label) label.textContent = labels[os];
+            if (anchor) anchor.href = href;
+            if (label) label.textContent = text;
+        }
+    };
+    const showIntel = (shown) => {
+        for (const link of document.querySelectorAll('[data-download-intel]')) link.hidden = !shown;
+    };
+
+    const labels = { macos: 'Download for macOS', windows: 'Download for Windows', linux: 'Download for Linux' };
+    if (isMobile()) {
+        promote('/download/', 'Download Kubermeister');
+        // The primary button already goes to the download page; a second one would say it twice.
+        for (const link of document.querySelectorAll('[data-download-all]')) link.hidden = true;
+    } else {
+        const os = detect();
+        if (os && links[os]) promote(links[os], labels[os]);
+        if (os === 'macos') {
+            showIntel(true);
+            architecture().then((arch) => {
+                if (arch !== 'x86') return;
+                promote(intelLink, labels.macos);
+                showIntel(false);
+            });
         }
     }
 </script>
