@@ -41,14 +41,16 @@ const isCurrent = (href: string) => href.startsWith('/') && href !== '/#features
             <ThemeToggle />
         </div>
     </div>
-
-    <nav class="border-t border-line md:hidden" aria-label="Main, compact">
-        <div class="container-page flex gap-1 overflow-x-auto py-2">
-            {NAV.map((link) => (
-                <a href={link.href} class="shrink-0 rounded-lg px-3 py-1.5 text-sm text-muted hover:text-fg">
-                    {link.label}
-                </a>
-            ))}
-        </div>
-    </nav>
 </header>
+
+<!-- Outside the sticky header, so on a phone only the bar stays pinned and the links scroll away
+     with the page instead of taking a second row of a short screen. -->
+<nav class="border-b border-line bg-bg md:hidden" aria-label="Main, compact">
+    <div class="container-page flex gap-1 overflow-x-auto py-2">
+        {NAV.map((link) => (
+            <a href={link.href} class="shrink-0 rounded-lg px-3 py-1.5 text-sm text-muted hover:text-fg">
+                {link.label}
+            </a>
+        ))}
+    </div>
+</nav>
