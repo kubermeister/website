@@ -7,91 +7,61 @@ export type Feature = {
     readonly icon: IconName;
 };
 
-export type IconName =
-    | 'activity'
-    | 'terminal'
-    | 'scroll'
-    | 'plug'
-    | 'helm'
-    | 'node'
-    | 'shield'
-    | 'chart'
-    | 'diff'
-    | 'search'
-    | 'file'
-    | 'bell';
+export type IconName = 'activity' | 'terminal' | 'scroll' | 'plug' | 'helm' | 'chart' | 'search' | 'file' | 'bell';
 
 export const FEATURES: readonly Feature[] = [
     {
-        title: 'Lists that are already live',
-        body: 'Most screens watch the API server instead of polling it. One informer serves every screen on the same kind, and rows are virtualised, so a list costs the size of your window rather than the size of your cluster.',
-        href: '/docs/browse/lists/',
-        icon: 'activity',
-    },
-    {
         title: 'Logs that open following',
-        body: 'A Logs tab starts live, because a log is opened to see what is happening now. Narrow by regex or highlight in place, pick a container and a time window, and download a pod’s log for that window from the API server rather than the buffer on screen.',
+        body: 'A Logs tab starts live. Narrow by regex or highlight in place, pick a container and a time window, and download that window’s log straight from the API server.',
         href: '/docs/sessions/logs/',
         icon: 'scroll',
     },
     {
         title: 'A shell that belongs to its pod',
-        body: 'The exec session lives in the pod’s own Shell tab: it opens when the tab does and ends with it, so a terminal is never left attached to a cluster nobody is looking at.',
+        body: 'The exec session lives in the pod’s own Shell tab and ends when the tab does, so a terminal is never left attached to a cluster nobody is watching.',
         href: '/docs/sessions/shell/',
         icon: 'terminal',
     },
     {
         title: 'Port forwards that survive a rollout',
-        body: 'Forward to a Service and the app resolves a ready endpoint per connection, so a deploy does not kill the tunnel. Every forward is listed and stopped from the top bar, wherever you started it.',
+        body: 'Forward to a Service and each connection goes to a ready endpoint, so a deploy doesn’t kill the tunnel. Every forward is listed and stopped from the top bar.',
         href: '/docs/sessions/port-forwarding/',
         icon: 'plug',
     },
     {
+        title: 'Lists that are already live',
+        body: 'Screens watch the API server instead of polling it, and only the rows in view are rendered. A list costs the size of your window, not the size of your cluster.',
+        href: '/docs/browse/lists/',
+        icon: 'activity',
+    },
+    {
         title: 'Helm releases, read properly',
-        body: 'Releases, revision history, rollback and uninstall — decoded from the Secrets Helm itself writes, and written back the same way, so a release this app rolls back is still one the Helm CLI can read.',
+        body: 'History, rollback and uninstall, decoded from the Secrets Helm itself writes. A release this app rolls back is still one the Helm CLI can read.',
         href: '/docs/operations/helm/',
         icon: 'helm',
     },
     {
-        title: 'Node drains you can watch',
-        body: 'Cordon a node, see exactly what a drain would do before it runs, then watch each pod go. Eviction honours PodDisruptionBudgets, and stopping leaves the node cordoned rather than half-drained silently.',
-        href: '/docs/operations/nodes/',
-        icon: 'node',
-    },
-    {
-        title: 'Rollouts you can compare',
-        body: 'Put two revisions of a pod template side by side, canonicalised so a difference on screen is one somebody made rather than one the API server filled in — then roll back with a JSON patch that actually undoes it.',
-        href: '/docs/workloads/rollouts/',
-        icon: 'diff',
-    },
-    {
-        title: 'Usage without a stack to run',
-        body: 'Charts for the cluster, each node, each Deployment and each pod, sampled from metrics-server while the app is open. No metrics-server means empty charts, never an error page.',
-        href: '/docs/operations/metrics/',
-        icon: 'chart',
-    },
-    {
         title: 'Alerts derived from the cluster',
-        body: 'Pending and failed pods, crash loops, image pull failures, failed Jobs and stuck claims, found through field selectors and the kubelet’s own events — never by reading every pod in the cluster.',
+        body: 'Pending and failed pods, crash loops, image pull failures, failed Jobs and stuck claims, found from field selectors and kubelet events rather than by reading every pod.',
         href: '/docs/operations/alerts/',
         icon: 'bell',
     },
     {
         title: 'Your CRDs, with their own columns',
-        body: 'Custom resources list with the additionalPrinterColumns their definition declares — the columns kubectl get -o wide would print — and edit through the same path as any built-in kind.',
+        body: 'Custom resources show the columns their definition declares, the ones kubectl get -o wide prints, and edit like any built-in kind.',
         href: '/docs/browse/custom-resources/',
         icon: 'search',
     },
     {
-        title: 'Manifests, describe and exports',
-        body: 'Read any object as YAML, describe pods and nodes as a structured document you can copy, and save a whole list selection as one file, as the cluster holds it or with the fields the server owns stripped out so it applies elsewhere.',
-        href: '/docs/browse/manifests/',
-        icon: 'file',
+        title: 'Usage without a stack to run',
+        body: 'Charts for the cluster, nodes, Deployments and pods, sampled from metrics-server while the app is open. No metrics-server means empty charts, not an error page.',
+        href: '/docs/operations/metrics/',
+        icon: 'chart',
     },
     {
-        title: 'Writes that fail closed',
-        body: 'Every write carries the context the screen was rendered under and is refused if the app has switched since. Deleting a node or a CRD asks you to type its name, and every delete asks before it goes.',
-        href: '/docs/workloads/writing/',
-        icon: 'shield',
+        title: 'Manifests, describe and exports',
+        body: 'Read any object as YAML, copy a structured describe, and export a selection as one file, either as the cluster holds it or cleaned up to apply elsewhere.',
+        href: '/docs/browse/manifests/',
+        icon: 'file',
     },
 ] as const;

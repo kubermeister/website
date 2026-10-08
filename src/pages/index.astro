@@ -103,7 +103,7 @@ const faqs: readonly Faq[] = [
     >
         <ul class="mt-14 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((feature) => (
-                <li class="bg-bg p-7 transition-colors hover:bg-surface/60">
+                <li class="bg-bg p-7 transition-colors hover:bg-surface/60 sm:last:odd:col-span-2 lg:last:odd:col-span-1">
                     <a href={feature.href} class="group block">
                         <Icon name={feature.icon} class="size-5 text-accent" />
                         <h3 class="mt-4 text-h3 font-semibold text-fg group-hover:text-accent">{feature.title}</h3>
