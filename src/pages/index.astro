@@ -1,6 +1,7 @@
 ---
 import Page from '../layouts/Page.astro';
 import Shot from '../components/Shot.astro';
+import HeroVideo from '../components/HeroVideo.astro';
 import Section from '../components/Section.astro';
 import DownloadCta from '../components/DownloadCta.astro';
 import CopyLine from '../components/CopyLine.astro';
@@ -80,16 +81,7 @@ const faqs: readonly Faq[] = [
         </div>
 
         <div class="container-page relative pb-16">
-            <div class="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
-                <Shot
-                    name="summary"
-                    alt="The Kubermeister cluster summary: node health, cluster CPU and memory usage charts, recent events and alerts."
-                    widths={[720, 1080, 1440, 1920]}
-                    sizes="(min-width: 1152px) 1088px, calc(100vw - 2.5rem)"
-                    eager
-                    class="w-full"
-                />
-            </div>
+            <HeroVideo />
         </div>
     </div>
 
