@@ -1,0 +1,89 @@
+---
+import { VIDEOS } from '../lib/videos';
+
+/**
+ * The hero plays the silent montage muted, on loop, to someone who has not decided to watch yet, and
+ * the narrated overview waits behind a button in a dialog, since it has sound. Both are dark
+ * recordings whatever the page's theme: the app is filmed once.
+ */
+---
+
+<div class="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+    <video
+        class="aspect-video w-full"
+        src={VIDEOS.hero}
+        poster={VIDEOS.poster}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Kubermeister in use: the cluster summary, the command palette, logs, a shell, a rollout diff, a manifest review, a Helm release, a drain plan, a port forward, a secret and a custom resource."
+        data-hero-video
+    ></video>
+</div>
+
+<div class="mt-6 flex justify-center">
+    <button
+        type="button"
+        class="inline-flex items-center gap-2.5 rounded-xl border border-line px-5 py-3 text-base text-fg-2 transition-colors hover:border-line-hi hover:text-fg"
+        data-overview-open
+    >
+        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <path d="M8 5.5v13l10-6.5z" stroke-linejoin="round"></path>
+        </svg>
+        Watch the overview
+        <span class="text-dim">{VIDEOS.overviewDuration}</span>
+    </button>
+</div>
+
+<dialog
+    class="m-auto w-[min(96vw,64rem)] rounded-2xl border border-line bg-surface p-0 shadow-card backdrop:bg-black/70"
+    aria-label="Kubermeister overview video"
+    data-overview-dialog
+>
+    <video
+        class="aspect-video w-full rounded-2xl"
+        src={VIDEOS.overview}
+        poster={VIDEOS.poster}
+        controls
+        preload="none"
+    ></video>
+    <button
+        type="button"
+        class="absolute top-3 right-3 rounded-full bg-black/60 p-2 text-white transition-colors hover:bg-black/80"
+        aria-label="Close"
+        data-overview-close
+    >
+        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"></path>
+        </svg>
+    </button>
+</dialog>
+
+<script>
+    const hero = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+    // A visitor who asked for less motion gets the poster frame, and plays nothing until they press play.
+    if (hero && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        hero.removeAttribute('autoplay');
+        hero.pause();
+        hero.controls = true;
+    }
+
+    const dialog = document.querySelector<HTMLDialogElement>('[data-overview-dialog]');
+    const overview = dialog?.querySelector('video');
+    const open = document.querySelector<HTMLButtonElement>('[data-overview-open]');
+    const close = dialog?.querySelector<HTMLButtonElement>('[data-overview-close]');
+    if (dialog && overview && open && close) {
+        open.addEventListener('click', () => {
+            dialog.showModal();
+            void overview.play();
+        });
+        close.addEventListener('click', () => dialog.close());
+        // A click on the backdrop lands on the dialog element itself, not on anything inside it.
+        dialog.addEventListener('click', (event) => {
+            if (event.target === dialog) dialog.close();
+        });
+        dialog.addEventListener('close', () => overview.pause());
+    }
+</script>

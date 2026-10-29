@@ -130,6 +130,16 @@ own.
   screenshot. A lazy image inside a hidden element is not fetched until it is shown, so only the
   hero pays for the pair it cannot defer.
 
+### Videos
+
+- **The videos come from the screencasts repository by URL**, attached to a release there
+  (`videos-<date>`), never committed here: a re-render would add megabytes of history each time.
+  `src/lib/videos.ts` holds the release and the three files, the silent hero montage, the narrated
+  overview and the poster frame, and a new render is a new release and a new tag in that file.
+- `src/components/HeroVideo.astro` loops the montage muted in the hero and opens the overview in a
+  dialog, since it has sound. A visitor who asked for less motion gets the poster and controls.
+  Both are dark recordings whatever the page's theme: the app is filmed once.
+
 ### Deployment
 
 - GitHub Pages, from `.github/workflows/deploy.yml` on a push to `main` or a `release-published`
