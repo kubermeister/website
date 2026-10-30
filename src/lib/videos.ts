@@ -1,16 +1,16 @@
 /**
- * The videos the landing page plays, by URL: they are rendered in the screencasts repository and
- * attached to a release there, never committed here (a re-render would add megabytes of history
- * each time). A new render is a new release and a new tag below; nothing else changes.
+ * The videos the landing page plays. They are rendered in the screencasts repository and copied here
+ * into `public/videos/`, so GitHub Pages serves them as `video/mp4` with range requests: a GitHub
+ * release asset is served as `application/octet-stream` with an attachment disposition, which iOS
+ * Safari refuses to play. The release stays as the archive of each render; a CDN replaces this
+ * folder when there is one, and only these paths change.
  */
-const RELEASE = 'https://github.com/kubermeister/screencasts/releases/download/videos-2026-10-29';
-
 export const VIDEOS = {
     /** The silent montage that loops in the hero: 49 s, no audio track. */
-    hero: `${RELEASE}/kubermeister-hero.mp4`,
+    hero: '/videos/kubermeister-hero.mp4',
     /** The same tour, narrated: 77 s. */
-    overview: `${RELEASE}/kubermeister-overview.mp4`,
+    overview: '/videos/kubermeister-overview.mp4',
     /** The first frame of the hero, shown until the video can play. */
-    poster: `${RELEASE}/kubermeister-poster.jpg`,
+    poster: '/videos/kubermeister-poster.jpg',
     overviewDuration: '1:17',
 } as const;

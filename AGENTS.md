@@ -132,21 +132,17 @@ own.
 
 ### Videos
 
-- **The videos come from the screencasts repository by URL**, attached to a release there
-  (`videos-<date>`), never committed here: a re-render would add megabytes of history each time.
-  `src/lib/videos.ts` holds the release and the three files, the silent hero montage, the narrated
-  overview and the poster frame, and a new render is a new release and a new tag in that file.
-- `src/components/HeroVideo.astro` loops the montage muted in the hero and opens the overview in a
-  dialog, since it has sound. A visitor who asked for less motion gets the poster and controls.
+- **The videos are rendered in the screencasts repository and copied into `public/videos/`**, so
+  GitHub Pages serves them as `video/mp4` with range requests. They were referenced from a GitHub
+  release first, but a release asset is served as `application/octet-stream` with an attachment
+  disposition, which iOS Safari refuses to play. Each render is still attached to a release there
+  (`videos-<date>`) as the archive; a CDN replaces the folder when there is one, and only the paths
+  in `src/lib/videos.ts` change. A re-render adds its megabytes to the history, which is the price
+  of working on an iPhone today.
+- `src/components/HeroVideo.astro` loops the silent montage muted in the hero, with a play button
+  over it (on hover where there is a pointer, always where there is not) that opens the narrated
+  overview in a dialog, since it has sound. A visitor who asked for less motion gets the poster.
   Both are dark recordings whatever the page's theme: the app is filmed once.
-
-### Deployment
-
-- GitHub Pages, from `.github/workflows/deploy.yml` on a push to `main` or a `release-published`
-  repository dispatch from the app's release workflow.
-- IndexNow submission runs after the deploy and reads the **live** sitemap, so it submits what was
-  actually published. It never fails a deploy that already succeeded. The key file in `public/`
-  and the `INDEXNOW_KEY` repository variable must hold the same value.
 
 ## Code style
 
