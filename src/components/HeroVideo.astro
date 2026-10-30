@@ -2,16 +2,16 @@
 import { VIDEOS } from '../lib/videos';
 
 /**
- * The hero plays the silent montage muted, on loop, to someone who has not decided to watch yet, and
- * the narrated overview waits behind a button in a dialog, since it has sound. Both are dark
- * recordings whatever the page's theme: the app is filmed once.
+ * The hero plays the silent montage muted, on loop, to someone who has not decided to watch yet. A
+ * play button over it, shown on hover where there is a pointer and always where there is not, opens
+ * the narrated overview in a dialog, since it has sound. Both are dark recordings whatever the
+ * page's theme: the app is filmed once.
  */
 ---
 
-<div class="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+<div class="group relative overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
     <video
         class="aspect-video w-full"
-        src={VIDEOS.hero}
         poster={VIDEOS.poster}
         autoplay
         muted
@@ -20,35 +20,33 @@ import { VIDEOS } from '../lib/videos';
         preload="metadata"
         aria-label="Kubermeister in use: the cluster summary, the command palette, logs, a shell, a rollout diff, a manifest review, a Helm release, a drain plan, a port forward, a secret and a custom resource."
         data-hero-video
-    ></video>
-</div>
-
-<div class="mt-6 flex justify-center">
+    >
+        <source src={VIDEOS.hero} type="video/mp4" />
+    </video>
     <button
         type="button"
-        class="inline-flex items-center gap-2.5 rounded-xl border border-line px-5 py-3 text-base text-fg-2 transition-colors hover:border-line-hi hover:text-fg"
+        class="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors hover:bg-black/20 focus-visible:bg-black/20 focus-visible:outline-none"
+        aria-label={`Watch the overview, ${VIDEOS.overviewDuration}`}
         data-overview-open
     >
-        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
-            <path d="M8 5.5v13l10-6.5z" stroke-linejoin="round"></path>
-        </svg>
-        Watch the overview
-        <span class="text-dim">{VIDEOS.overviewDuration}</span>
+        <span class="flex items-center gap-3 rounded-full bg-black/65 py-3 pr-6 pl-5 text-base font-medium text-white shadow-card backdrop-blur transition-opacity [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-focus-within:opacity-100">
+            <svg class="size-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M8 5.5v13l10-6.5z"></path>
+            </svg>
+            Watch the overview
+            <span class="text-white/70">{VIDEOS.overviewDuration}</span>
+        </span>
     </button>
 </div>
 
 <dialog
-    class="m-auto w-[min(96vw,64rem)] rounded-2xl border border-line bg-surface p-0 shadow-card backdrop:bg-black/70"
+    class="m-auto w-[min(96vw,160vh)] max-w-none rounded-2xl border border-line bg-black p-0 shadow-card backdrop:bg-black/80"
     aria-label="Kubermeister overview video"
     data-overview-dialog
 >
-    <video
-        class="aspect-video w-full rounded-2xl"
-        src={VIDEOS.overview}
-        poster={VIDEOS.poster}
-        controls
-        preload="none"
-    ></video>
+    <video class="aspect-video w-full rounded-2xl" poster={VIDEOS.poster} controls playsinline preload="none">
+        <source src={VIDEOS.overview} type="video/mp4" />
+    </video>
     <button
         type="button"
         class="absolute top-3 right-3 rounded-full bg-black/60 p-2 text-white transition-colors hover:bg-black/80"
@@ -63,11 +61,10 @@ import { VIDEOS } from '../lib/videos';
 
 <script>
     const hero = document.querySelector<HTMLVideoElement>('[data-hero-video]');
-    // A visitor who asked for less motion gets the poster frame, and plays nothing until they press play.
+    // A visitor who asked for less motion gets the poster frame; the play button still opens the overview.
     if (hero && matchMedia('(prefers-reduced-motion: reduce)').matches) {
         hero.removeAttribute('autoplay');
         hero.pause();
-        hero.controls = true;
     }
 
     const dialog = document.querySelector<HTMLDialogElement>('[data-overview-dialog]');
